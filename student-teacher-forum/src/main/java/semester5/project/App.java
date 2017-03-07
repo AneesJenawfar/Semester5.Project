@@ -36,4 +36,5 @@ public class App extends SpringBootServletInitializer {
 		tilesViewRelosver.setViewClass(TilesView.class);
 		return tilesViewRelosver;
 	}
+
 }
