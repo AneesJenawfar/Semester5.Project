@@ -3,6 +3,8 @@ package semester5.project.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Calendar;
+
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -20,6 +22,7 @@ import semester5.project.model.StatusUpdateDao;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(App.class)
 @WebAppConfiguration
+
 @Transactional
 public class StatusTest {
 
@@ -37,4 +40,21 @@ public class StatusTest {
 		StatusUpdate retrieved = statusupdatedao.findOne(status.getId());
 		assertEquals("Matching StatusUpdate", status, retrieved);
 	}
+
+	@Test
+	public void testFindLatest() {
+
+		Calendar calendar = Calendar.getInstance();
+		StatusUpdate Last = null;
+
+		for (int i = 0; i < 10; i++) {
+			calendar.add(Calendar.DAY_OF_YEAR, 1);
+			StatusUpdate state = new StatusUpdate("Status" + i, calendar.getTime());
+			statusupdatedao.save(state);
+			Last = state;
+		}
+		StatusUpdate ret = statusupdatedao.findFirstByOrderByUpdatedDesc();
+		assertEquals("Latest Status Update", Last, ret);
+	}
+
 }
