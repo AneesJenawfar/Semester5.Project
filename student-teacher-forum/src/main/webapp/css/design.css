@@ -1,0 +1,51 @@
+.navbar{
+	
+	background-color: white;
+	border-color: navy;
+}
+
+.navbar > .container-fluid > div > .navbar-nav >  li > a{
+	background: none;
+	color: navy;
+	font-weight: bold;
+}
+
+.navbar > .container-fluid > div > .navbar-nav >  li > a:hover{
+	background: none;
+	color: #2645d9;
+	font-weight: bold;
+}
+
+.box {
+  background:#fff;
+  transition:all 0.2s ease;
+  border:2px dashed #dadada;
+  margin-top: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background-clip: padding-box;
+  padding:0 20px 20px 20px;
+  min-height:340px;
+}
+
+.box:hover {
+  border:2px solid #525C7A;
+}
+
+.box span.box-title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+.box .box-content {
+  padding: 16px;
+  border-radius: 0 0 2px 2px;
+  background-clip: padding-box;
+  box-sizing: border-box;
+}
+.box .box-content p {
+  color:#515c66;
+  text-transform:none;
+}
