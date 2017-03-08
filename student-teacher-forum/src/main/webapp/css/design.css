@@ -49,3 +49,7 @@
   color:#515c66;
   text-transform:none;
 }
+
+.errors {
+	color: red;
+}
