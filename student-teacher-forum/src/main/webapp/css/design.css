@@ -53,3 +53,34 @@
 .errors {
 	color: red;
 }
+
+li.ui-state-default{
+    background:#fff0;
+    border:none;
+    border-bottom:1px solid #ddd;
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+.btn,.form-control,.well {
+    border-radius:1px;
+    box-shadow:0 0 0;
+}
+
+.form-control {
+    border-color:#d7d7d7;
+}
+
+.well {
+    border-color:#d2d2d2;
+    box-shadow:0 1px 0 #cfcfcf;
+    border-radius:3px;
+}
+
+.btn span{
+ color:#666666;
+}
+
+.list-group-item:first-child,.list-group-item:last-child {
+ border-radius:0;
+}

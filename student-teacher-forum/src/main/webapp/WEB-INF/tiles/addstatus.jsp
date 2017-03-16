@@ -9,7 +9,6 @@
 		<div class="box">
 			<div class="box-content">
 				<h1 class="tag-title">Add New Status</h1>
-				
 				<form:form modelAttribute="statusUpdate">
 					<div class="errors">
 						<form:errors path="text"/>
@@ -27,11 +26,15 @@
 		<div class="box">
 			<div class="box-content">
 				<h3 class="tag-title">Last Status on <fmt:formatDate pattern = "EEEE d MMMM y 'at' HH:mm:s" value="${latest.updated}"/></h3>
-				<c:out value="${latest.text }"/>
-				
-				
+				${latest.text }
 			</div>
 		</div>
 	</div>
 </div>
-
+<script src='//cloud.tinymce.com/stable/tinymce.min.js'></script>
+  <script>
+  tinymce.init({
+    selector: 'textarea',
+    plugins: "link"
+  });
+  </script>

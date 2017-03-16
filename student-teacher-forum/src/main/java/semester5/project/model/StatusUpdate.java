@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "status_update")
 public class StatusUpdate {
@@ -28,6 +30,7 @@ public class StatusUpdate {
 
 	@Column(name = "updated")
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
 	private Date updated;
 
 	@PrePersist
