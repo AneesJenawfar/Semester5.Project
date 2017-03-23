@@ -16,15 +16,15 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "status_update")
-public class StatusUpdate {
+@Table(name = "post")
+public class Post {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Size(min = 2, max = 255, message = "{addstatus.text.size}")
+	@Size(min = 2, max = 255, message = "{addpost.text.size}")
 	@Column(name = "text")
 	private String text;
 
@@ -39,15 +39,15 @@ public class StatusUpdate {
 			updated = new Date();
 	}
 
-	public StatusUpdate() {
+	public Post() {
 
 	}
 
-	public StatusUpdate(String text) {
+	public Post(String text) {
 		this.text = text;
 	}
 
-	public StatusUpdate(String text, Date updated) {
+	public Post(String text, Date updated) {
 		this.text = text;
 		this.updated = updated;
 	}
@@ -94,7 +94,7 @@ public class StatusUpdate {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		StatusUpdate other = (StatusUpdate) obj;
+		Post other = (Post) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -8,25 +8,23 @@
 	<div class="col-md-8 col-md-offset-2 text-center">
 		<div class="box">
 			<div class="box-content">
-				<h1 class="tag-title">Add New Status</h1>
-				<form:form modelAttribute="statusUpdate">
+				<h1 class="tag-title">Edit Post</h1>
+				<form:form modelAttribute="post">
+					<form:input type="hidden" path="id"/>
+					<form:input type="hidden" path="updated"/>
 					<div class="errors">
 						<form:errors path="text"/>
+						<form:errors path="id"/>
+						<form:errors path="updated"/>
 					</div>
 					<div class="form-group">
 						<form:textarea path="text" class="form-control" name="text"
 							rows="10"></form:textarea>
 					</div>
 					<div class="form-group">
-						<button class="btn btn-primary " name="submit" type="submit">Update</button>
+						<button class="btn btn-primary " name="submit" type="submit">Save</button>
 					</div>
 				</form:form>
-			</div>
-		</div>
-		<div class="box">
-			<div class="box-content">
-				<h3 class="tag-title">Last Status on <fmt:formatDate pattern = "EEEE d MMMM y 'at' HH:mm:s" value="${latest.updated}"/></h3>
-				${latest.text }
 			</div>
 		</div>
 	</div>

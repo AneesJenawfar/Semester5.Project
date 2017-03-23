@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import semester5.project.App;
-import semester5.project.model.StatusUpdate;
-import semester5.project.model.StatusUpdateDao;
+import semester5.project.model.Post;
+import semester5.project.model.PostDao;
 
 @SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,37 +24,37 @@ import semester5.project.model.StatusUpdateDao;
 @WebAppConfiguration
 
 @Transactional
-public class StatusTest {
+public class PostTest {
 
 	@Autowired
-	private StatusUpdateDao statusupdatedao;
+	private PostDao postupdatedao;
 
 	@Test
 	public void TestSave() {
-		StatusUpdate status = new StatusUpdate("This is a Test Status Update");
-		statusupdatedao.save(status);
+		Post post = new Post("This is a Test Post");
+		postupdatedao.save(post);
 
-		assertNotNull("Non-null ID", status.getId());
-		assertNotNull("Non-null date", status.getUpdated());
+		assertNotNull("Non-null ID", post.getId());
+		assertNotNull("Non-null date", post.getUpdated());
 
-		StatusUpdate retrieved = statusupdatedao.findOne(status.getId());
-		assertEquals("Matching StatusUpdate", status, retrieved);
+		Post retrieved = postupdatedao.findOne(post.getId());
+		assertEquals("Matching Post", post, retrieved);
 	}
 
 	@Test
 	public void testFindLatest() {
 
 		Calendar calendar = Calendar.getInstance();
-		StatusUpdate Last = null;
+		Post Last = null;
 
 		for (int i = 0; i < 10; i++) {
 			calendar.add(Calendar.DAY_OF_YEAR, 1);
-			StatusUpdate state = new StatusUpdate("Status" + i, calendar.getTime());
-			statusupdatedao.save(state);
+			Post state = new Post("Post" + i, calendar.getTime());
+			postupdatedao.save(state);
 			Last = state;
 		}
-		StatusUpdate ret = statusupdatedao.findFirstByOrderByUpdatedDesc();
-		assertEquals("Latest Status Update", Last, ret);
+		Post ret = postupdatedao.findFirstByOrderByUpdatedDesc();
+		assertEquals("Latest Post", Last, ret);
 	}
 
 }

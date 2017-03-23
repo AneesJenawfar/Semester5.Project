@@ -1,86 +1,93 @@
-.navbar{
-	
+.login-error {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: red;
+	font-weight: bold;
+}
+
+.navbar {
 	background-color: white;
 	border-color: navy;
 }
 
-.navbar > .container-fluid > div > .navbar-nav >  li > a{
+.navbar>.container-fluid>div>.navbar-nav>li>a {
 	background: none;
 	color: navy;
 	font-weight: bold;
 }
 
-.navbar > .container-fluid > div > .navbar-nav >  li > a:hover{
+.navbar>.container-fluid>div>.navbar-nav>li>a:hover {
 	background: none;
 	color: #2645d9;
 	font-weight: bold;
 }
 
 .box {
-  background:#fff;
-  transition:all 0.2s ease;
-  border:2px dashed #dadada;
-  margin-top: 10px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  background-clip: padding-box;
-  padding:0 20px 20px 20px;
-  min-height:340px;
+	background: #fff;
+	transition: all 0.2s ease;
+	border: 2px dashed #dadada;
+	margin-top: 10px;
+	box-sizing: border-box;
+	border-radius: 5px;
+	background-clip: padding-box;
+	padding: 0 20px 20px 20px;
+	min-height: 340px;
 }
 
 .box:hover {
-  border:2px solid #525C7A;
+	border: 2px solid #525C7A;
 }
 
 .box span.box-title {
-    color: #fff;
-    font-size: 24px;
-    font-weight: 300;
-    text-transform: uppercase;
+	color: #fff;
+	font-size: 24px;
+	font-weight: 300;
+	text-transform: uppercase;
 }
 
 .box .box-content {
-  padding: 16px;
-  border-radius: 0 0 2px 2px;
-  background-clip: padding-box;
-  box-sizing: border-box;
+	padding: 16px;
+	border-radius: 0 0 2px 2px;
+	background-clip: padding-box;
+	box-sizing: border-box;
 }
+
 .box .box-content p {
-  color:#515c66;
-  text-transform:none;
+	color: #515c66;
+	text-transform: none;
 }
 
 .errors {
 	color: red;
 }
 
-li.ui-state-default{
-    background:#fff0;
-    border:none;
-    border-bottom:1px solid #ddd;
-    text-align: left;
-    padding-bottom: 10px;
+li.ui-state-default {
+	background: #fff0;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	text-align: left;
+	padding-bottom: 10px;
 }
 
-.btn,.form-control,.well {
-    border-radius:1px;
-    box-shadow:0 0 0;
+.btn, .form-control, .well {
+	border-radius: 1px;
+	box-shadow: 0 0 0;
 }
 
 .form-control {
-    border-color:#d7d7d7;
+	border-color: #d7d7d7;
 }
 
 .well {
-    border-color:#d2d2d2;
-    box-shadow:0 1px 0 #cfcfcf;
-    border-radius:3px;
+	border-color: #d2d2d2;
+	box-shadow: 0 1px 0 #cfcfcf;
+	border-radius: 3px;
 }
 
-.btn span{
- color:#666666;
+.btn span {
+	color: #666666;
 }
 
-.list-group-item:first-child,.list-group-item:last-child {
- border-radius:0;
+.list-group-item:first-child, .list-group-item:last-child {
+	border-radius: 0;
 }

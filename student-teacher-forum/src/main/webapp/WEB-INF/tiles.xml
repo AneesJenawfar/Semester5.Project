@@ -4,7 +4,7 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
   <definition name="app.default" template="/WEB-INF/layouts/default.jsp">
-  	<put-attribute name="title" value="STF Forum" />
+  	<put-attribute name="title" value="Acca Forum" />
   </definition>
   
   <definition name="app.homepage" extends="app.default">
@@ -15,15 +15,23 @@
     <put-attribute name="content" value="/WEB-INF/tiles/about.jsp" />
   </definition>
   
-  <definition name="app.addStatus" extends="app.default">
-    <put-attribute name="content" value="/WEB-INF/tiles/addstatus.jsp" />
+  <definition name="app.addPost" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/addpost.jsp" />
   </definition>
   
-  <definition name="app.viewStatus" extends="app.default">
-    <put-attribute name="content" value="/WEB-INF/tiles/viewstatus.jsp" />
+  <definition name="app.viewPost" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/viewpost.jsp" />
   </definition>
   
-  <definition name="app.editStatus" extends="app.default">
-    <put-attribute name="content" value="/WEB-INF/tiles/editstatus.jsp" />
+  <definition name="app.editPost" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/editpost.jsp" />
+  </definition>
+  
+  <definition name="app.login" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/login.jsp" />
+  </definition>
+  
+  <definition name="app.register" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/register.jsp" />
   </definition>
 </tiles-definitions>

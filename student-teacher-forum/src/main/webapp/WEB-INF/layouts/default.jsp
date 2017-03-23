@@ -2,7 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -29,39 +31,55 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">STF</a>
+			<a class="navbar-brand" href="#">AccaForum</a>
 		</div>
 
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<div class="collapse navbar-collapse"
+			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="${contextRoot}/">HOME <span class="sr-only">(current)</span></a></li>
+				<li class="active"><a href="${contextRoot}/">HOME <span
+						class="sr-only">(current)</span></a></li>
 				<li><a href="${contextRoot}/about">About</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">Dropdown <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="${contextRoot}/viewstatus">View Status Updates</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="#">Separated link</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="#">One more separated link</a></li>
-					</ul></li>
+
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Post <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="${contextRoot}/viewpost">View Posts </a></li>
+							<li><a href="${contextRoot}/addpost">New Post</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul></li>
+				</sec:authorize>
 			</ul>
-			<div>
-			
-			</div>
+			<div></div>
 			<form class="navbar-form navbar-left">
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Search">
 				</div>
 				<button type="submit" class="btn btn-default">Submit</button>
 			</form>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="${contextRoot}/addstatus">New Status</a></li>
-			</ul>
+			<sec:authorize access="isAuthenticated()">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="javascript:$('#logoutform').submit();">Logout</a></li>
+				</ul>
+			</sec:authorize>
+			<sec:authorize access="!isAuthenticated()">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="${contextRoot}/login">Login</a></li>
+					<li><a href="${contextRoot}/register">Register</a></li>
+				</ul>
+			</sec:authorize>
 		</div>
 	</div>
 	</nav>
+
+	<c:url var="logoutlink" value="/logout" />
+	<form id="logoutform" action="${logoutlink}" method="post">
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}">
+	</form>
 	<div class="container">
 		<tiles:insertAttribute name="content" />
 	</div>

@@ -9,22 +9,22 @@
     <div class="col-md-8 col-md-offset-2 text-center">
 		
 		<pgn:pagination  url ="${url}" page="${page}" size="5"/>
-		<c:forEach var = "status" items="${page.content}">
-			<c:url var="edit" value="/editstatus?id=${status.id}"/>
-			<c:url var="delete" value="/deletestatus?id=${status.id}"/>
+		<c:forEach var = "post" items="${page.content}">
+			<c:url var="edit" value="/editpost?id=${post.id}"/>
+			<c:url var="delete" value="/deletepost?id=${post.id}"/>
 			<div class="well">
 		    	<ul class="list-unstyled ui-sortable">
-		        <strong class="pull-left primary-font">Status Updatetd on <fmt:formatDate pattern = "EEEE d MMMM y"
-		         value="${status.updated}"/></strong>
+		        <strong class="pull-left primary-font">Post Updated on <fmt:formatDate pattern = "EEEE d MMMM y"
+		         value="${post.updated}"/></strong>
 		        <small class="pull-right text-muted">
 		           <span class="glyphicon glyphicon-time"></span><fmt:formatDate pattern = "'at' HH:mm:s"
-		         value="${status.updated}"/></small>
+		         value="${post.updated}"/></small>
 		        </br>
 		        <br/>
-		        <li class="ui-state-default">${status.text }</li>
+		        <li class="ui-state-default">${post.text }</li>
 		        </br>
 				<div class="edit-links pull-right">
-					<a href="${edit}">edit</a>|<a onclick="return confirm('This status is going to be deleted. Are you sure?');"
+					<a href="${edit}">edit</a>|<a onclick="return confirm('This post is going to be deleted. Are you sure?');"
 					href="${delete}">delete</a>
 				</div>
 		    	</ul>
