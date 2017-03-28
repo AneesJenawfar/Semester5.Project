@@ -25,19 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		//@formatter:off
 		http
 			.authorizeRequests()
-				.antMatchers("/",
-						"/about",
-						"/register")
-				.permitAll()
-				.antMatchers("/js/*",
-							"/css/*",
-							"/img/*")
-				.permitAll()
-				.antMatchers("/addpost",
-						"/editpost",
-						"/deletepost",
-						"/viewpost")
-				.hasRole("ADMIN")
+				.antMatchers("/","/about","/register").permitAll()
+				.antMatchers("/js/*","/css/*","/img/*").permitAll()
+				.antMatchers("/addpost","/editpost","/deletepost","/viewpost").authenticated()
+				/*.antMatchers("").hasRole("ADMIN")*/
 				.and()
 			.formLogin()
 				.loginPage("/login")
@@ -46,8 +37,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.permitAll();
-			
-		
 		//@formatter:on
 	}
 

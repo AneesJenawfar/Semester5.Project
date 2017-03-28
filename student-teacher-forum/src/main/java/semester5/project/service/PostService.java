@@ -15,28 +15,28 @@ public class PostService {
 	private final static int pageSize = 5;
 
 	@Autowired
-	private PostDao dao;
+	private PostDao postDao;
 
 	public void save(Post post) {
-		dao.save(post);
+		postDao.save(post);
 	}
 
 	public Post getLatest() {
-		return dao.findFirstByOrderByUpdatedDesc();
+		return postDao.findFirstByOrderByUpdatedDesc();
 	}
 
 	public Page<Post> getPage(int pagenumber) {
 		PageRequest request = new PageRequest(pagenumber - 1, pageSize, Sort.Direction.DESC, "updated");
-		return dao.findAll(request);
+		return postDao.findAll(request);
 	}
 
 	public void delete(Long id) {
-		dao.delete(id);
+		postDao.delete(id);
 
 	}
 
 	public Post get(Long id) {
 
-		return dao.findOne(id);
+		return postDao.findOne(id);
 	}
 }

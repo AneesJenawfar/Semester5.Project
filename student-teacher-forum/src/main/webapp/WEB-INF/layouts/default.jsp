@@ -41,13 +41,24 @@
 						class="sr-only">(current)</span></a></li>
 				<li><a href="${contextRoot}/about">About</a></li>
 
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false">Post <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="${contextRoot}/viewpost">View Posts </a></li>
-							<li><a href="${contextRoot}/addpost">New Post</a></li>
+							<li><a href="${contextRoot}/addpost">Create Post</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul></li>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Administrator<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">View Users </a></li>
+							<li><a href="#">New Posts</a></li>
 							<li role="separator" class="divider"></li>
 							<li><a href="#">One more separated link</a></li>
 						</ul></li>

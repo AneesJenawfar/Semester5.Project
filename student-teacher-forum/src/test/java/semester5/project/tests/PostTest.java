@@ -27,17 +27,17 @@ import semester5.project.model.PostDao;
 public class PostTest {
 
 	@Autowired
-	private PostDao postupdatedao;
+	private PostDao postdao;
 
 	@Test
 	public void TestSave() {
 		Post post = new Post("This is a Test Post");
-		postupdatedao.save(post);
+		postdao.save(post);
 
 		assertNotNull("Non-null ID", post.getId());
 		assertNotNull("Non-null date", post.getUpdated());
 
-		Post retrieved = postupdatedao.findOne(post.getId());
+		Post retrieved = postdao.findOne(post.getId());
 		assertEquals("Matching Post", post, retrieved);
 	}
 
@@ -50,10 +50,10 @@ public class PostTest {
 		for (int i = 0; i < 10; i++) {
 			calendar.add(Calendar.DAY_OF_YEAR, 1);
 			Post state = new Post("Post" + i, calendar.getTime());
-			postupdatedao.save(state);
+			postdao.save(state);
 			Last = state;
 		}
-		Post ret = postupdatedao.findFirstByOrderByUpdatedDesc();
+		Post ret = postdao.findFirstByOrderByUpdatedDesc();
 		assertEquals("Latest Post", Last, ret);
 	}
 
