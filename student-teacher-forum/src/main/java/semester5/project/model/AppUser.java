@@ -40,6 +40,9 @@ public class AppUser { // this the User Class
 	@Column(name = "password", length = 60)
 	private String password;
 
+	@Column(name = "enabled")
+	private Boolean enabled = false;
+
 	@Column(name = "role", length = 20)
 	private String role;
 
@@ -90,6 +93,14 @@ public class AppUser { // this the User Class
 
 	public void setRepeatPassword(String repeatPassword) {
 		this.repeatPassword = repeatPassword;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

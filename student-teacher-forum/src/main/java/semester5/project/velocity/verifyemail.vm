@@ -1,0 +1,6 @@
+<html>
+<body>
+<p> Thank You for registering to the AccaForum</p>
+<p> Please Click <a href="${url}/confirmed?t=${token}  "> here </a> to verify </p>
+</body>
+</html>

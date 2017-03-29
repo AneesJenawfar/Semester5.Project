@@ -1,4 +1,4 @@
-package semester5.project.security;
+package semester5.project.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ import semester5.project.service.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		//@formatter:off
 		http
 			.authorizeRequests()
-				.antMatchers("/","/about","/register").permitAll()
+				.antMatchers("/","/about","/register","/confirmed","/invaliduser","/expiredtoken").permitAll()
 				.antMatchers("/js/*","/css/*","/img/*").permitAll()
 				.antMatchers("/addpost","/editpost","/deletepost","/viewpost").authenticated()
 				/*.antMatchers("").hasRole("ADMIN")*/
