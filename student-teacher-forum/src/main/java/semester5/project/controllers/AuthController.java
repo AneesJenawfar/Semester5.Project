@@ -1,5 +1,6 @@
 package semester5.project.controllers;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
 
 import javax.validation.Valid;
@@ -51,6 +52,30 @@ public class AuthController {
 		return "app.verifyemail";
 	}
 
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	ModelAndView register(ModelAndView mav) throws FileNotFoundException {
+		AppUser user = new AppUser(); // creating a AppUser object
+		mav.getModel().put("user", user); // put the object in the model
+		mav.setViewName("app.register"); // set the model name to connect a tile
+											// definition
+		return mav; // returns the model
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	ModelAndView register(ModelAndView mav, @ModelAttribute(value = "user") @Valid AppUser user, BindingResult result) {
+		mav.setViewName("app.register");
+		if (!result.hasErrors()) {
+			userService.register(user);
+			String token = userService.createEmailVerificationToken(user);
+			emailService.sendVarificationEmail(user.getEmail(), token);
+			// user.setEnabled(true);
+			// userService.save(user);
+			mav.setViewName("redirect:/verifyemail");
+
+		}
+		return mav;
+	}
+
 	@RequestMapping("/confirmed")
 	ModelAndView registrationConfirmed(ModelAndView mav, @RequestParam("t") String tokenString) {
 		VerificationToken token = userService.getVerificationToken(tokenString);
@@ -76,7 +101,7 @@ public class AuthController {
 		userService.deleteToken(token);
 		user.setEnabled(true);
 		userService.save(user);
-		
+
 		mav.getModel().put("message", confirmedMessage);
 		mav.setViewName("app.message");
 		return mav;
@@ -96,25 +121,4 @@ public class AuthController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	ModelAndView register(ModelAndView mav) {
-		AppUser user = new AppUser(); // creating a AppUser object
-		mav.getModel().put("user", user); // put the object in the model
-		mav.setViewName("app.register"); // set the model name to connect a tile
-											// definition
-		return mav; // returns the model
-	}
-
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	ModelAndView register(ModelAndView mav, @ModelAttribute(value = "user") @Valid AppUser user, BindingResult result) {
-		mav.setViewName("app.register");
-		if (!result.hasErrors()) {
-			userService.register(user);
-			String token = userService.createEmailVerificationToken(user);
-			emailService.sendVarificationEmail(user.getEmail(), token);
-			mav.setViewName("redirect:/verifyemail");
-
-		}
-		return mav;
-	}
 }

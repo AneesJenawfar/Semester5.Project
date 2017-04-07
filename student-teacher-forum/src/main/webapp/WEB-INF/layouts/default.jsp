@@ -73,6 +73,7 @@
 			</form>
 			<sec:authorize access="isAuthenticated()">
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="${contextRoot}/profile">Profile</a></li>
 					<li><a href="javascript:$('#logoutform').submit();">Logout</a></li>
 				</ul>
 			</sec:authorize>
@@ -94,6 +95,7 @@
 	<div class="container">
 		<tiles:insertAttribute name="content" />
 	</div>
+
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="${contextRoot}/js/bootstrap.min.js"></script>

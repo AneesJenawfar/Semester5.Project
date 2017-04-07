@@ -43,5 +43,15 @@
     <put-attribute name="content" value="/WEB-INF/tiles/message.jsp" />
   </definition>
   
+  <definition name="app.exception" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/exception.jsp" />
+  </definition>
   
+  <definition name="app.profile" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/profile.jsp" />
+  </definition>
+  
+  <definition name="app.editProfile" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/editprofile.jsp" />
+  </definition>
 </tiles-definitions>

@@ -25,9 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		//@formatter:off
 		http
 			.authorizeRequests()
-				.antMatchers("/","/about","/register","/confirmed","/invaliduser","/expiredtoken").permitAll()
+				.antMatchers("/","/about","/register","/confirmed","/invaliduser","/expiredtoken","/verifyemail").permitAll()
 				.antMatchers("/js/*","/css/*","/img/*").permitAll()
-				.antMatchers("/addpost","/editpost","/deletepost","/viewpost").authenticated()
+				.antMatchers("/addpost","/editpost","/deletepost","/viewpost","/profile","/edit-profile").authenticated()
+				.anyRequest().denyAll()
 				/*.antMatchers("").hasRole("ADMIN")*/
 				.and()
 			.formLogin()

@@ -17,7 +17,7 @@
 						<input type="hidden" name="${_csrf.parameterName}"
 							value="${_csrf.token}">
 						<div id="legend">
-							<legend class="">Login</legend>
+							<legend>Login</legend>
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="username">Username</label>
