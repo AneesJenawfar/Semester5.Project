@@ -27,7 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/","/about","/register","/confirmed","/invaliduser","/expiredtoken","/verifyemail").permitAll()
 				.antMatchers("/js/*","/css/*","/img/*").permitAll()
-				.antMatchers("/addpost","/editpost","/deletepost","/viewpost","/profile","/edit-profile").authenticated()
+				.antMatchers("/addpost","/editpost","/deletepost","/viewpost","/profile",
+							"/edit-profile","/upload-photo","/profile-photo").authenticated()
 				.anyRequest().denyAll()
 				/*.antMatchers("").hasRole("ADMIN")*/
 				.and()

@@ -15,7 +15,7 @@
 				<form class="form-horizontal" action="${loginurl}" method="POST">
 					<fieldset>
 						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}">
+							value="${_csrf.token}"/>
 						<div id="legend">
 							<legend>Login</legend>
 						</div>

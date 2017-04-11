@@ -1,5 +1,8 @@
 package semester5.project.model;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +31,15 @@ public class Profile {
 	@Column(name = "about", length = 5000)
 	@Size(max = 5000, message = "{about.size}")
 	private String about;
+
+	@Column(name = "photo_directory", length = 10)
+	private String photoDirectory;
+
+	@Column(name = "photo_name", length = 10)
+	private String photoName;
+
+	@Column(name = "photo_extention", length = 5)
+	private String photoExtention;
 
 	public Long getId() {
 		return id;
@@ -64,4 +76,39 @@ public class Profile {
 
 	}
 
+	public String getPhotoDirectory() {
+		return photoDirectory;
+	}
+
+	public void setPhotoDirectory(String photoDirectory) {
+		this.photoDirectory = photoDirectory;
+	}
+
+	public String getPhotoName() {
+		return photoName;
+	}
+
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
+	}
+
+	public String getPhotoExtention() {
+		return photoExtention;
+	}
+
+	public void setPhotoExtention(String photoExtention) {
+		this.photoExtention = photoExtention;
+	}
+
+	public void setPhotoDetails(FileInfo info) {
+		this.photoDirectory = info.getSubDirectory();
+		this.photoExtention = info.getExtention();
+		this.photoName = info.getBasename();
+	}
+
+	public Path getPhoto(String baseDirectory) {
+		if (photoName == null)
+			return null;
+		return Paths.get(baseDirectory, photoDirectory, photoName + "." + photoExtention);
+	}
 }

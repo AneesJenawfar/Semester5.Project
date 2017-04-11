@@ -64,6 +64,7 @@ public class App extends SpringBootServletInitializer {
 		};
 	}
 
+	@Bean
 	PolicyFactory getUserHtmlPlicy() {
 		return new HtmlPolicyBuilder().allowCommonBlockElements().allowCommonInlineFormattingElements().toFactory();
 	}
