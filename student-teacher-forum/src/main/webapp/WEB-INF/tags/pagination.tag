@@ -1,9 +1,14 @@
 <%@ tag language="java" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!-- ATRIBUTES -->
+<!-- Spring page object -->
 <%@ attribute name="page" required = "true" type="org.springframework.data.domain.Page"%>
+<!-- base url of page -->
 <%@ attribute name="url" required = "true" %>
 <%@ attribute name="size" required = "false" %>
+
+<c:set var="paramListSep" value="${fn:contains(url, '?') ? '&': '?'}"/>
 
 <c:set var ="size" value="${empty size ? 10: size}"/>
 <c:set var ="block" value="${empty param.b ? 0: param.b}"/>
@@ -14,12 +19,12 @@
 <c:if test="${page.totalPages != 1}">
 	<div class="pagination">
 		<c:if test="${block != 0}">
-			<a href="${url}?b=${block-1}&p=${(block-1)*size + 1}">&lt;&lt;</a>
+			<a href="${url}${paramListSep}b=${block-1}&p=${(block-1)*size + 1}">&lt;&lt;</a>
 		</c:if>
 		<c:forEach var="pagenumber" begin="${startpage}" end="${endpage}">
 			<c:choose>
 				<c:when test="${page.number != pagenumber-1}">
-					<a href="${url}?p=${pagenumber}&b=${block}"><c:out value="${pagenumber}"/></a>
+					<a href="${url}${paramListSep}p=${pagenumber}&b=${block}"><c:out value="${pagenumber}"/></a>
 				</c:when>
 				<c:otherwise>
 					<strong><c:out value="${pagenumber}"/></strong>
@@ -30,7 +35,7 @@
 			</c:if>
 		</c:forEach>
 		<c:if test="${endpage != page.totalPages}">
-			<a href="${url}?b=${block+1}&p=${(block+1)*size + 1}">&gt;&gt;</a>
+			<a href="${url}${paramListSep}b=${block+1}&p=${(block+1)*size + 1}">&gt;&gt;</a>
 		</c:if>
 	</div>
 </c:if>

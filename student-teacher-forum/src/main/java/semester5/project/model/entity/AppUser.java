@@ -1,4 +1,4 @@
-package semester5.project.model;
+package semester5.project.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +25,14 @@ public class AppUser { // this the User Class
 	@Column(name = "id") // define the column in database
 	private Long id;
 
+	@Column(name = "firstname", length = 20)
+	@Size(min = 2, max = 20, message = "{register.firstname.size}")
+	private String firstname;
+
+	@Column(name = "surname", length = 25)
+	@Size(min = 2, max = 25, message = "{register.surname.size}")
+	private String surname;
+
 	@Column(name = "email", unique = true) // define the column in database
 	@Email(message = "{register.email.invalid}")
 	@NotBlank(message = "{register.email.invalid}")
@@ -45,6 +53,19 @@ public class AppUser { // this the User Class
 
 	@Column(name = "role", length = 20)
 	private String role;
+
+	public AppUser() {
+
+	}
+
+	public AppUser(String email, String password, String firstname, String surname) {
+		this.email = email;
+		this.setPlainPassword(password);
+		this.repeatPassword = password;
+		this.enabled = true;
+		this.firstname = firstname;
+		this.surname = surname;
+	}
 
 	public Long getId() {
 		return id;
@@ -101,6 +122,29 @@ public class AppUser { // this the User Class
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	@Override
+	public String toString() {
+		return "AppUser [id=" + id + ", firstname=" + firstname + ", surname=" + surname + ", email=" + email
+				+ ", plainPassword=" + plainPassword + ", repeatPassword=" + repeatPassword + ", password=" + password
+				+ ", enabled=" + enabled + ", role=" + role + "]";
 	}
 
 }

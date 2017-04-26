@@ -14,11 +14,26 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <title><tiles:insertAttribute name="title" /></title>
 <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
+<c:set var="search" value="/search" />
 
 <link href="${contextRoot}/css/bootstrap.min.css" rel="stylesheet">
 <link href="${contextRoot}/css/design.css" rel="stylesheet">
+
+<!-- This is for javascript tagging on the profile -->
+<link href="${contextRoot}/css/jquery.tagit.css" rel="stylesheet">
+
+<script src="${contextRoot}/js/jquery-ui.min.js"></script>
+<script src="${contextRoot}/js/tag-it.min.js"></script>
+
+
 </head>
 <body>
 	<nav class="navbar CC">
@@ -64,13 +79,23 @@
 						</ul></li>
 				</sec:authorize>
 			</ul>
-			<div></div>
-			<form class="navbar-form navbar-left">
+			
+			
+			
+			
+			<form class="navbar-form navbar-left" method="post" action="${search}">
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Search">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" /> 
+					<input type="text" class="form-control" name="s"
+						placeholder="Search">
 				</div>
-				<button type="submit" class="btn btn-default">Submit</button>
+				<button id="search-button" type="submit" class="btn btn-default">Submit</button>
 			</form>
+			
+			
+			
+			
 			<sec:authorize access="isAuthenticated()">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="${contextRoot}/profile">Profile</a></li>
@@ -90,14 +115,12 @@
 	<c:url var="logoutlink" value="/logout" />
 	<form id="logoutform" action="${logoutlink}" method="post">
 		<input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}">
+			value="${_csrf.token}" />
 	</form>
 	<div class="container">
 		<tiles:insertAttribute name="content" />
 	</div>
 
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="${contextRoot}/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -12,11 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import semester5.project.model.AppUser;
-import semester5.project.model.TokenType;
-import semester5.project.model.UserDao;
-import semester5.project.model.VerificationDao;
-import semester5.project.model.VerificationToken;
+import semester5.project.model.entity.AppUser;
+import semester5.project.model.entity.TokenType;
+import semester5.project.model.entity.VerificationToken;
+import semester5.project.model.repository.UserDao;
+import semester5.project.model.repository.VerificationDao;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -66,5 +66,9 @@ public class UserService implements UserDetailsService {
 	public AppUser get(String email) {
 		return userDao.findByEmail(email);
 
+	}
+
+	public AppUser get(Long id) {
+		return userDao.findOne(id);
 	}
 }

@@ -1,4 +1,4 @@
-package semester5.project.model;
+package semester5.project.model.dto;
 
 public class FileInfo {
 

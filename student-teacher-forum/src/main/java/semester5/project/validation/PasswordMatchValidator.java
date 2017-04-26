@@ -3,7 +3,7 @@ package semester5.project.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import semester5.project.model.AppUser;
+import semester5.project.model.entity.AppUser;
 
 public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, AppUser> {
 

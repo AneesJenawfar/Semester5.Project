@@ -11,8 +11,24 @@
 	<form:form class="form-horizontal" modelAttribute="user" method="POST">
 		<fieldset>
 			<div id="legend">
-				<legend class="">Create a new account</legend>
+				<legend>Create a new account</legend>
 			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="firstname">First Name</label>
+				<div class="controls">
+					<form:input type="text" path="firstname" placeholder="First Name"
+						class="input-xlarge" />
+				</div>
+
+				<label class="control-label" for="surname">Surname</label>
+				<div class="controls">
+					<form:input type="text" path="surname" placeholder="SurName"
+						class="input-xlarge" />
+				</div>
+
+			</div>
+
 			<div class="control-group">
 				<!-- E-mail -->
 				<label class="control-label" for="email">E-mail</label>
@@ -35,7 +51,7 @@
 					(Confirm)</label>
 				<div class="controls">
 					<form:input type="password" path="repeatPassword" placeholder=""
-						class="input-xlarge"/>
+						class="input-xlarge" />
 				</div>
 			</div>
 			<div class="control-group">

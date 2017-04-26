@@ -1,18 +1,20 @@
 package semester5.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import semester5.project.model.Post;
-import semester5.project.model.PostDao;
+import semester5.project.model.entity.Post;
+import semester5.project.model.repository.PostDao;
 
 @Service
 public class PostService {
 
-	private final static int pageSize = 5;
+	@Value("${post.pagesize}")
+	private int pageSize;
 
 	@Autowired
 	private PostDao postDao;

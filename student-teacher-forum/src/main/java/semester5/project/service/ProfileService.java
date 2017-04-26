@@ -3,9 +3,9 @@ package semester5.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import semester5.project.model.AppUser;
-import semester5.project.model.Profile;
-import semester5.project.model.ProfileDao;
+import semester5.project.model.entity.AppUser;
+import semester5.project.model.entity.Profile;
+import semester5.project.model.repository.ProfileDao;
 
 @Service
 public class ProfileService {

@@ -1,4 +1,4 @@
-package semester5.project.model;
+package semester5.project.model.entity;
 
 import java.util.Calendar;
 import java.util.Date;

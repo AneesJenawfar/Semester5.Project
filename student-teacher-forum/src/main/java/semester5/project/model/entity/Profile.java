@@ -1,19 +1,26 @@
-package semester5.project.model;
+package semester5.project.model.entity;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.owasp.html.PolicyFactory;
+
+import semester5.project.model.dto.FileInfo;
 
 @Entity
 @Table(name = "profile")
@@ -41,6 +48,20 @@ public class Profile {
 	@Column(name = "photo_extention", length = 5)
 	private String photoExtention;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "profile_interests", joinColumns = { @JoinColumn(name = "profier_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "interest_id") })
+	@OrderColumn(name = "display_order")
+	private Set<Interest> interests;
+
+	public Profile() {
+
+	}
+
+	public Profile(AppUser user) {
+		this.user = user;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -65,11 +86,15 @@ public class Profile {
 		this.about = about;
 	}
 
+	// Create a profile that is suitable for displaying via JSP
 	public void safeCopyFrom(Profile other) {
 		if (other.about != null)
 			this.about = other.about;
+		if (other.interests != null)
+			this.interests = other.interests;
 	}
 
+	// Create a profile that is suitable for saving
 	public void safeMergeFrom(Profile webProfile, PolicyFactory htmlPolicy) {
 		if (webProfile.about != null)
 			this.about = htmlPolicy.sanitize(webProfile.about);
@@ -111,4 +136,29 @@ public class Profile {
 			return null;
 		return Paths.get(baseDirectory, photoDirectory, photoName + "." + photoExtention);
 	}
+
+	public Set<Interest> getInterests() {
+		return interests;
+	}
+
+	public void setInterests(Set<Interest> interests) {
+		this.interests = interests;
+	}
+
+	public void addInterest(Interest interest) {
+		this.interests.add(interest);
+
+	}
+
+	public void removeInterest(String interestName) {
+		interests.remove(new Interest(interestName));
+
+	}
+
+	@Override
+	public String toString() {
+		return "Profile [id=" + id + ", user=" + user + ", about=" + about + ", photoDirectory=" + photoDirectory
+				+ ", photoName=" + photoName + ", photoExtention=" + photoExtention + ", interests=" + interests + "]";
+	}
+
 }

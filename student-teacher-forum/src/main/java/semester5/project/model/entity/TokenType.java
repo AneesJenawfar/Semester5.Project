@@ -1,4 +1,4 @@
-package semester5.project.model;
+package semester5.project.model.entity;
 
 public enum TokenType {
 

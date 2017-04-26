@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import semester5.project.App;
-import semester5.project.model.Post;
-import semester5.project.model.PostDao;
+import semester5.project.model.entity.Post;
+import semester5.project.model.repository.PostDao;
 
 @SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import semester5.project.model.AppUser;
-import semester5.project.model.VerificationToken;
+import semester5.project.model.entity.AppUser;
+import semester5.project.model.entity.VerificationToken;
 import semester5.project.service.EmailService;
 import semester5.project.service.UserService;
 

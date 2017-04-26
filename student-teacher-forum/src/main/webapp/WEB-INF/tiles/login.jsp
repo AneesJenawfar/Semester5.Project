@@ -5,6 +5,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:url var="loginurl" value="/login" />
+<c:url var="registerurl" value="/register" />
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 register-prompt">
+	
+	Please log in or <a href="${registerurl}"> Click here to create an account </a>. It's free.
+	</div>
+</div>
 <div class="col-md-6 col-md-offset-3">
 	<div class="container">
 		<div class="row">
@@ -15,7 +22,7 @@
 				<form class="form-horizontal" action="${loginurl}" method="POST">
 					<fieldset>
 						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}"/>
+							value="${_csrf.token}" />
 						<div id="legend">
 							<legend>Login</legend>
 						</div>
