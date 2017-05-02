@@ -12,6 +12,7 @@
 		<c:forEach var = "post" items="${page.content}">
 			<c:url var="edit" value="/editpost?id=${post.id}"/>
 			<c:url var="delete" value="/deletepost?id=${post.id}"/>
+			<c:url var="comments" value="/comment?id=${post.id}"/>
 			<div class="well">
 		    	<ul class="list-unstyled ui-sortable">
 		        <strong class="pull-left primary-font">Post Updated on <fmt:formatDate pattern = "EEEE d MMMM y"
@@ -21,7 +22,9 @@
 		         value="${post.updated}"/></small>
 		        </br>
 		        <br/>
-		        <li class="ui-state-default">${post.text }</li>
+		        <li class="ui-state-default">
+		        <a href="${comments}">${post.text }</a>
+		        </li>
 		        </br>
 				<div class="edit-links pull-right">
 					<a href="${edit}">edit</a>|<a onclick="return confirm('This post is going to be deleted. Are you sure?');"

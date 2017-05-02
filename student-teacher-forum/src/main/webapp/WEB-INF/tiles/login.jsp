@@ -16,7 +16,7 @@
 	<div class="container">
 		<div class="row">
 			<c:if test="${param.error != null}">
-				<div class="login-error">Incorrect username or password</div>
+				<div class="login-error">Incorrect user name or password</div>
 			</c:if>
 			<div class="span12">
 				<form class="form-horizontal" action="${loginurl}" method="POST">

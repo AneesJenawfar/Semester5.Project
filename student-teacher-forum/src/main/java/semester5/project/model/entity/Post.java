@@ -7,12 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.owasp.html.PolicyFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -32,6 +35,10 @@ public class Post {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
 	private Date updated;
+
+	@ManyToOne(targetEntity = AppUser.class)
+	@JoinColumn(name = "user_id", nullable = false)
+	private AppUser user;
 
 	@PrePersist
 	protected void onCreate() {
@@ -113,4 +120,24 @@ public class Post {
 		return true;
 	}
 
+	public AppUser getUser() {
+		return user;
+	}
+
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
+
+	// Create a profile that is suitable for displaying via JSP
+	public void safeCopyFrom(Post other) {
+		if (other.text != null)
+			this.text = other.text;
+	}
+
+	// Create a profile that is suitable for saving
+	public void safeMergeFrom(Post webPost, PolicyFactory htmlPolicy) {
+		if (webPost.text != null)
+			this.text = htmlPolicy.sanitize(webPost.text);
+
+	}
 }
