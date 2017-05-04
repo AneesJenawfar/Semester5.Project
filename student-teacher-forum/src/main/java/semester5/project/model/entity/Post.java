@@ -1,14 +1,21 @@
 package semester5.project.model.entity;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,6 +24,8 @@ import javax.validation.constraints.Size;
 
 import org.owasp.html.PolicyFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import semester5.project.model.dto.FileInfo;
 
 @Entity
 @Table(name = "post")
@@ -27,6 +36,10 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Size(min = 5, max = 20, message = "{addpost.text.size}")
+	@Column(name = "title")
+	private String title;
+
 	@Size(min = 2, max = 255, message = "{addpost.text.size}")
 	@Column(name = "text")
 	private String text;
@@ -36,9 +49,24 @@ public class Post {
 	@DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
 	private Date updated;
 
+	@Column(name = "photo_directory", length = 10)
+	private String photoDirectory;
+
+	@Column(name = "photo_name", length = 10)
+	private String photoName;
+
+	@Column(name = "photo_extention", length = 5)
+	private String photoExtention;
+
 	@ManyToOne(targetEntity = AppUser.class)
 	@JoinColumn(name = "user_id", nullable = false)
 	private AppUser user;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "likes", joinColumns = { @JoinColumn(name = "post_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "user_id") })
+	@OrderColumn(name = "display_order")
+	private Set<AppUser> likes;
 
 	@PrePersist
 	protected void onCreate() {
@@ -67,6 +95,14 @@ public class Post {
 		this.id = id;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getText() {
 		return text;
 	}
@@ -81,6 +117,66 @@ public class Post {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+
+	public AppUser getUser() {
+		return user;
+	}
+
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
+
+	public Set<AppUser> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<AppUser> likes) {
+		this.likes = likes;
+	}
+
+	public void addLike(AppUser user) {
+		this.likes.add(user);
+	}
+
+	public void removeLike(AppUser user) {
+		likes.remove(user);
+	}
+
+	public String getPhotoDirectory() {
+		return photoDirectory;
+	}
+
+	public void setPhotoDirectory(String photoDirectory) {
+		this.photoDirectory = photoDirectory;
+	}
+
+	public String getPhotoName() {
+		return photoName;
+	}
+
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
+	}
+
+	public String getPhotoExtention() {
+		return photoExtention;
+	}
+
+	public void setPhotoExtention(String photoExtention) {
+		this.photoExtention = photoExtention;
+	}
+
+	public void setPhotoDetails(FileInfo info) {
+		this.photoDirectory = info.getSubDirectory();
+		this.photoExtention = info.getExtention();
+		this.photoName = info.getBasename();
+	}
+
+	public Path getPhoto(String baseDirectory) {
+		if (photoName == null)
+			return null;
+		return Paths.get(baseDirectory, photoDirectory, photoName + "." + photoExtention);
 	}
 
 	@Override
@@ -120,24 +216,21 @@ public class Post {
 		return true;
 	}
 
-	public AppUser getUser() {
-		return user;
-	}
-
-	public void setUser(AppUser user) {
-		this.user = user;
-	}
-
-	// Create a profile that is suitable for displaying via JSP
+	// Create a post that is suitable for displaying via JSP
 	public void safeCopyFrom(Post other) {
 		if (other.text != null)
 			this.text = other.text;
+		if (other.title != null)
+			this.title = other.title;
+
 	}
 
-	// Create a profile that is suitable for saving
+	// Create a post that is suitable for saving
 	public void safeMergeFrom(Post webPost, PolicyFactory htmlPolicy) {
 		if (webPost.text != null)
 			this.text = htmlPolicy.sanitize(webPost.text);
+		if (webPost.title != null)
+			this.title = htmlPolicy.sanitize(webPost.title);
 
 	}
 }

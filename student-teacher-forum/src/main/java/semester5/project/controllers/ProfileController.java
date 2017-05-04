@@ -58,7 +58,7 @@ public class ProfileController {
 	@Autowired
 	private PolicyFactory htmlPolicy;
 
-	@Value("${photo.upload.directory}")
+	@Value("${profile.photo.directory}")
 	private String photoUploadDirectory;
 
 	@Value("${photo.upload.ok}")
@@ -94,7 +94,7 @@ public class ProfileController {
 
 		Profile webProfile = new Profile();
 		webProfile.safeCopyFrom(profile);
-		mav.getModel().put("userId", user.getId());
+		mav.getModel().put("user", user);
 		mav.getModel().put("profile", webProfile);
 		mav.setViewName("app.profile");
 		return mav;
@@ -105,6 +105,7 @@ public class ProfileController {
 
 		AppUser user = getUser();
 		ModelAndView mav = showProfile(user);
+
 		mav.getModel().put("owner", true);
 		return mav;
 	}
@@ -127,6 +128,7 @@ public class ProfileController {
 
 		Profile webProfile = new Profile();
 		webProfile.safeCopyFrom(profile);
+
 		mav.getModel().put("profile", webProfile);
 		mav.setViewName("app.editProfile");
 		return mav;
@@ -139,6 +141,7 @@ public class ProfileController {
 
 		AppUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
+
 		profile.safeMergeFrom(webProfile, htmlPolicy);
 
 		if (!result.hasErrors()) {
@@ -161,7 +164,7 @@ public class ProfileController {
 
 		try {
 			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "Photos", "P" + user.getId(),
-					100, 100);
+					350, 400);
 			profile.setPhotoDetails(photoInfo);
 			profileService.save(profile);
 

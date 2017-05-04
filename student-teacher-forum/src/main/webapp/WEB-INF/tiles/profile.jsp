@@ -4,11 +4,11 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<c:url var="profilePhoto" value="/profile-photo/${userId}" />
+<c:url var="profilePhoto" value="/profile-photo/${user.id}" />
 <c:url var="editProfile" value="/edit-profile" />
 <c:url var="saveInterest" value="/save-interest" />
 <c:url var="deleteInterest" value="/delete-interest" />
-<div class="row">
+<%-- <div class="row">
 	<div class="col-md-10 col-md-offset-1">
 		<div id="profile-status"></div>
 
@@ -22,14 +22,10 @@
 						<c:forEach var="interest" items="${profile.interests}">
 							<li>${interest.name}</li>
 						</c:forEach>
-
 					</c:otherwise>
 				</c:choose>
 			</ul>
-
-
 		</div>
-
 		<div class="profile-about">
 			<div class="profile-image">
 				<div>
@@ -55,7 +51,6 @@
 						${profile.about}
 					</c:otherwise>
 				</c:choose>
-
 			</div>
 		</div>
 		<div class="profile-edit">
@@ -72,6 +67,74 @@
 				type="submit" value="upload" /> <input type="hidden"
 				name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
+	</div>
+</div> --%>
+
+<div class="row">
+	<div id="profile-status"></div>
+	<div class="col-md-6 col-md-offset-3 profilebox">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-2">
+				<img class="img-rounded img-responsive profileimage"
+					id="profileImage" src="${profilePhoto}" />
+			</div>
+			<div class="text-center">
+				<c:if test="${owner== true}">
+					<a href="#" id="uploadLink">Upload Photo</a>
+				</c:if>
+			</div>
+
+			<br />
+			<h4>${user.firstname}	${user.surname}</h4>
+			<small>${profile.address} <i
+				class="glyphicon glyphicon-map-marker"> </i>
+			</small>
+			<p>
+				<i class="glyphicon glyphicon-envelope"></i>${user.email} <i
+					class="glyphicon glyphicon-phone"></i>${profile.phone}<br /> <i
+					class="glyphicon glyphicon-book"></i>${profile.school } <i
+					class="glyphicon glyphicon-calendar"></i>June 02, 1988<br />
+			</p>
+			<strong><i>Interests </i><br>
+				<div id="interest">
+					<ul id="interestList">
+						<c:choose>
+							<c:when test="${empty profile.interests} }">
+								<li>Add Your interest here</li>
+							</c:when>
+							<c:otherwise>
+								<c:forEach var="interest" items="${profile.interests}">
+									<li>${interest.name}</li>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
+					</ul>
+				</div> </strong><br /> <strong><i>Personal Statement </i> </strong><br />
+			<div class="profile-text">
+				<c:choose>
+					<c:when test="${profile.about==null}">A mischievous student wants to break
+				into a computer file, which is password-protected. Assume that there
+				are n passwords only one of which is correct, and that the student
+				tries possible passwords in a random order.</c:when>
+					<c:otherwise>
+						${profile.about}
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<c:if test="${owner== true}">
+				<div class="btn-group pull-right">
+					<button type="button" class="btn btn-primary editprofile" onclick="location.href='${editProfile}'">Edit</button>
+				</div>
+			</c:if>
+
+			<c:url value="/upload-photo" var="uploadPhoto" />
+			<form method="post" enctype="multipart/form-data"
+				id="photoUploadForm" action="${uploadPhoto}">
+				<input type="file" accept="image/*" name="file" id="fileInput" /> <input
+					type="submit" value="upload" /> <input type="hidden"
+					name="${_csrf.parameterName}" value="${_csrf.token}" />
+			</form>
+		</div>
 	</div>
 </div>
 
@@ -147,8 +210,8 @@
 			},
 			caseSensitive : false,
 			allowSpaces : true,
-			tagLimit: 10,
-			readOnly: '${owner}' == 'false'
+			tagLimit : 10,
+			readOnly : '${owner}' == 'false'
 		});
 
 		$("#uploadLink").click(function(event) {

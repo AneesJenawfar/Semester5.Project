@@ -8,46 +8,26 @@
 <c:url var="registerurl" value="/register" />
 <div class="row">
 	<div class="col-md-6 col-md-offset-3 register-prompt">
-	
-	Please log in or <a href="${registerurl}"> Click here to create an account </a>. It's free.
+
+		Please log in or <a href="${registerurl}"> Click here to create an
+			account </a>. It's free.
 	</div>
 </div>
-<div class="col-md-6 col-md-offset-3">
-	<div class="container">
-		<div class="row">
-			<c:if test="${param.error != null}">
-				<div class="login-error">Incorrect user name or password</div>
-			</c:if>
-			<div class="span12">
-				<form class="form-horizontal" action="${loginurl}" method="POST">
-					<fieldset>
-						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
-						<div id="legend">
-							<legend>Login</legend>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="username">Username</label>
-							<div class="controls">
-								<input type="text" id="username" name="username" placeholder=""
-									class="input-xlarge">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="password">Password</label>
-							<div class="controls">
-								<input type="password" id="password" name="password"
-									placeholder="" class="input-xlarge">
-							</div>
-						</div>
-						<div class="control-group">
-							<div class="controls">
-								<button class="btn btn-success">Login</button>
-							</div>
-						</div>
-					</fieldset>
-				</form>
-			</div>
-		</div>
-	</div>
+
+<c:if test="${param.error != null}">
+	<div class="login-error">Incorrect user name or password</div>
+</c:if>
+<div class="wrapper">
+	<form action="${loginurl}" method="post" class="form-signin">
+		<h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
+		<hr class="colorgraph">
+
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" /> <br> <input type="text"
+			class="form-control sign" id="username" name="username"
+			placeholder="E-mail" required /> <input type="password"
+			class="form-control sign" id="password" name="password"
+			placeholder="Password" required />
+		<button class="btn btn-lg btn-primary btn-block">Login</button>
+	</form>
 </div>

@@ -1,24 +1,44 @@
 package semester5.project.controllers;
 
+import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 import javax.validation.Valid;
 
 import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import semester5.project.exception.ImageTooSmallException;
+import semester5.project.exception.InvalidFileException;
+import semester5.project.model.dto.FileInfo;
 import semester5.project.model.entity.AppUser;
 import semester5.project.model.entity.Post;
+import semester5.project.service.FileService;
 import semester5.project.service.PostService;
 import semester5.project.service.UserService;
+import semester5.project.status.PhotoUploadStatus;
 
 @Controller
 public class PostController {
@@ -29,7 +49,25 @@ public class PostController {
 	private UserService userService;
 
 	@Autowired
+	private FileService fileService;
+
+	@Autowired
 	private PolicyFactory htmlPolicy;
+
+	@Value("${post.photo.directory}")
+	private String postPhotoDirectory;
+
+	@Value("${photo.upload.ok}")
+	private String photoUploaded;
+
+	@Value("${photo.upload.invalid}")
+	private String photoInvalid;
+
+	@Value("${photo.upload.iofailed}")
+	private String photoIOFailed;
+
+	@Value("${photo.upload.small}")
+	private String photoSmall;
 
 	private AppUser getUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -58,28 +96,31 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/viewpost", method = RequestMethod.GET)
-	ModelAndView viewPost(ModelAndView mav, @RequestParam(name = "p", defaultValue = "1") int pagenumber) {
+	public ModelAndView viewPost(ModelAndView mav, @RequestParam(name = "p", defaultValue = "1") int pagenumber) {
 
+		AppUser user = getUser();
 		Page<Post> page = postService.getPage(pagenumber);
+		mav.getModel().put("user", user);
 		mav.getModel().put("page", page);
 		mav.setViewName("app.viewPost");
 		return mav;
 	}
 
 	@RequestMapping(value = "/deletepost", method = RequestMethod.GET)
-	ModelAndView deletePost(ModelAndView mav, @RequestParam(name = "id") Long id) {
+	public ModelAndView deletePost(ModelAndView mav, @RequestParam(name = "id") Long id) {
 		postService.delete(id);
 		mav.setViewName("redirect:/viewpost");
 		return mav;
 	}
 
 	@RequestMapping(value = "/editpost", method = RequestMethod.GET)
-	ModelAndView editPost(ModelAndView mav, @RequestParam(name = "id") Long id) {
+	public ModelAndView editPost(ModelAndView mav, @RequestParam(name = "id") Long id) {
 		Post post = postService.get(id);
 
 		Post webPost = new Post();
 		webPost.safeCopyFrom(post);
 
+		mav.getModel().put("realpost", post);
 		mav.getModel().put("post", webPost);
 		mav.getModel().put("postId", id);
 		mav.setViewName("app.editPost");
@@ -87,7 +128,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/editpost", method = RequestMethod.POST)
-	ModelAndView editPost(ModelAndView mav, @Valid Post webPost, @Valid Long id, BindingResult result) {
+	public ModelAndView editPost(ModelAndView mav, @Valid Post webPost, @Valid Long id, BindingResult result) {
 
 		mav.setViewName("app.editPost");
 
@@ -101,4 +142,53 @@ public class PostController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/upload-post-photo/{id}", method = RequestMethod.POST)
+	@ResponseBody // Return Data JSON format
+	public ResponseEntity<PhotoUploadStatus> handlePhotoUpload(@RequestParam("file") MultipartFile file,
+			@PathVariable("id") Long id) {
+
+		Post post = postService.get(id);
+
+		Path oldPhotoPath = post.getPhoto(postPhotoDirectory);
+
+		PhotoUploadStatus status = new PhotoUploadStatus(photoUploaded);
+
+		try {
+			FileInfo photoInfo = fileService.saveImageFile(file, postPhotoDirectory, "Photos", "P" + post.getId(), 400,
+					400);
+			post.setPhotoDetails(photoInfo);
+			postService.save(post);
+
+			if (oldPhotoPath != null)
+				Files.delete(oldPhotoPath);
+
+		} catch (InvalidFileException e) {
+			status.setMessage(photoInvalid);
+			e.printStackTrace();
+		} catch (IOException e) {
+			status.setMessage(photoIOFailed);
+			e.printStackTrace();
+		} catch (ImageTooSmallException e) {
+			status.setMessage(photoSmall);
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(status, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/post-photo/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<InputStreamResource> servePhoto(@PathVariable("id") Long id) throws IOException {
+
+		Post post = postService.get(id);
+
+		Path photoPath = Paths.get(postPhotoDirectory, "Default", "Default.jpg");
+
+		if (post != null && post.getPhoto(postPhotoDirectory) != null)
+			photoPath = post.getPhoto(postPhotoDirectory);
+
+		return ResponseEntity.ok().contentLength(Files.size(photoPath))
+				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))
+				.body(new InputStreamResource(Files.newInputStream(photoPath, StandardOpenOption.READ)));
+	}
 }

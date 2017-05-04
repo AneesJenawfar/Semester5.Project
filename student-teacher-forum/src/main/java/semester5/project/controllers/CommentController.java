@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import semester5.project.model.entity.AppUser;
@@ -40,7 +43,7 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.GET)
-	ModelAndView viewComments(ModelAndView mav, @RequestParam("id") Long id) {
+	public ModelAndView viewComments(ModelAndView mav, @RequestParam("id") Long id) {
 
 		Comment comment = new Comment();
 		Post post = postService.get(id);
@@ -55,7 +58,7 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.POST)
-	ModelAndView addComment(ModelAndView mav, @Valid Comment comment, @Valid Post post, BindingResult result) {
+	public ModelAndView addComment(ModelAndView mav, @Valid Comment comment, @Valid Post post, BindingResult result) {
 
 		AppUser user = getUser();
 		mav.setViewName("redirect:/");
@@ -64,8 +67,45 @@ public class CommentController {
 			comment.setPost(post);
 			commentService.save(comment);
 			mav.setViewName("redirect:/viewpost");
+		} else {
+			commentService.delete(comment.getId());
 		}
 		return mav;
 	}
 
+	@RequestMapping(value = "/like", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> like(@RequestParam("id") Long id) {
+
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		System.out.println(id);
+		Post post = postService.get(id);
+		AppUser user = getUser();
+
+		post.addLike(user);
+		postService.save(post);
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/dislike", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> dislike(@RequestParam("id") Long id) {
+
+		Post post = postService.get(id);
+		AppUser user = getUser();
+
+		post.removeLike(user);
+		postService.save(post);
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
 }

@@ -19,7 +19,7 @@
 <c:if test="${page.totalPages != 1}">
 	<div class="pagination">
 		<c:if test="${block != 0}">
-			<a href="${url}${paramListSep}b=${block-1}&p=${(block-1)*size + 1}">&lt;&lt;</a>
+			<li class="previous"><a href="${url}${paramListSep}b=${block-1}&p=${(block-1)*size + 1}">&larr; Older</a></li>
 		</c:if>
 		<c:forEach var="pagenumber" begin="${startpage}" end="${endpage}">
 			<c:choose>
@@ -35,7 +35,7 @@
 			</c:if>
 		</c:forEach>
 		<c:if test="${endpage != page.totalPages}">
-			<a href="${url}${paramListSep}b=${block+1}&p=${(block+1)*size + 1}">&gt;&gt;</a>
+			<li class="next"><a href="${url}${paramListSep}b=${block+1}&p=${(block+1)*size + 1}">Newer &rarr;</a></li>
 		</c:if>
 	</div>
 </c:if>

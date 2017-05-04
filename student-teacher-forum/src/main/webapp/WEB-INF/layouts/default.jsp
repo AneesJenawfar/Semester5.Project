@@ -13,7 +13,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
 
@@ -24,6 +23,11 @@
 <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 <c:set var="search" value="/search" />
 
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+
 <link href="${contextRoot}/css/bootstrap.min.css" rel="stylesheet">
 <link href="${contextRoot}/css/design.css" rel="stylesheet">
 
@@ -32,20 +36,13 @@
 
 <script src="${contextRoot}/js/jquery-ui.min.js"></script>
 <script src="${contextRoot}/js/tag-it.min.js"></script>
-
-
 </head>
+
+
 <body>
 	<nav class="navbar CC">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-				aria-expanded="false">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
 			<a class="navbar-brand" href="#">AccaForum</a>
 		</div>
 
@@ -63,10 +60,9 @@
 						<ul class="dropdown-menu">
 							<li><a href="${contextRoot}/viewpost">View Posts </a></li>
 							<li><a href="${contextRoot}/addpost">Create Post</a></li>
-							<li role="separator" class="divider"></li>
-							<li><a href="#">One more separated link</a></li>
 						</ul></li>
 				</sec:authorize>
+
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -74,34 +70,27 @@
 						<ul class="dropdown-menu">
 							<li><a href="#">View Users </a></li>
 							<li><a href="#">New Posts</a></li>
-							<li role="separator" class="divider"></li>
-							<li><a href="#">One more separated link</a></li>
 						</ul></li>
 				</sec:authorize>
 			</ul>
-			
-			
-			
-			
-			<form class="navbar-form navbar-left" method="post" action="${search}">
+
+			<form class="navbar-form navbar-left" method="post"
+				action="${search}">
 				<div class="form-group">
 					<input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" /> 
-					<input type="text" class="form-control" name="s"
-						placeholder="Search">
+						value="${_csrf.token}" /> <input type="text" class="form-control"
+						name="s" placeholder="Search">
 				</div>
 				<button id="search-button" type="submit" class="btn btn-default">Submit</button>
 			</form>
-			
-			
-			
-			
+
 			<sec:authorize access="isAuthenticated()">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="${contextRoot}/profile">Profile</a></li>
 					<li><a href="javascript:$('#logoutform').submit();">Logout</a></li>
 				</ul>
 			</sec:authorize>
+
 			<sec:authorize access="!isAuthenticated()">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="${contextRoot}/login">Login</a></li>

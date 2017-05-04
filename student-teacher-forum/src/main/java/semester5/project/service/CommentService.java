@@ -24,4 +24,9 @@ public class CommentService {
 
 		return commentDao.findByPostId(post.getId()).stream().collect(Collectors.toList());
 	}
+
+	public void delete(Long id) {
+		commentDao.delete(id);
+
+	}
 }

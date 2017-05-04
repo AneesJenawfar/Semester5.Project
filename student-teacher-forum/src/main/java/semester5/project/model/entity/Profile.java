@@ -35,6 +35,18 @@ public class Profile {
 	@JoinColumn(name = "user_id", nullable = false)
 	private AppUser user;
 
+	@Column(name = "address", length = 100)
+	@Size(min = 15, max = 100, message = "{addpost.text.size}")
+	private String address;
+
+	@Column(name = "phone", length = 12)
+	@Size(min = 10, max = 12, message = "{phone.size}")
+	private String phone;
+
+	@Column(name = "school", length = 100)
+	@Size(min = 15, max = 100, message = "{addpost.text.size}")
+	private String school;
+
 	@Column(name = "about", length = 5000)
 	@Size(max = 5000, message = "{about.size}")
 	private String about;
@@ -86,19 +98,54 @@ public class Profile {
 		this.about = about;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getSchool() {
+		return school;
+	}
+
+	public void setSchool(String school) {
+		this.school = school;
+	}
+
 	// Create a profile that is suitable for displaying via JSP
 	public void safeCopyFrom(Profile other) {
 		if (other.about != null)
 			this.about = other.about;
 		if (other.interests != null)
 			this.interests = other.interests;
+		if (other.address != null)
+			this.address = other.address;
+		if (other.phone != null)
+			this.phone = other.phone;
+		if (other.school != null)
+			this.school = other.school;
 	}
 
 	// Create a profile that is suitable for saving
 	public void safeMergeFrom(Profile webProfile, PolicyFactory htmlPolicy) {
 		if (webProfile.about != null)
 			this.about = htmlPolicy.sanitize(webProfile.about);
-
+		if (webProfile.address != null)
+			this.address = htmlPolicy.sanitize(webProfile.address);
+		if (webProfile.phone != null)
+			this.phone = htmlPolicy.sanitize(webProfile.phone);
+		if (webProfile.school != null)
+			this.school = htmlPolicy.sanitize(webProfile.school);
 	}
 
 	public String getPhotoDirectory() {
@@ -157,8 +204,9 @@ public class Profile {
 
 	@Override
 	public String toString() {
-		return "Profile [id=" + id + ", user=" + user + ", about=" + about + ", photoDirectory=" + photoDirectory
-				+ ", photoName=" + photoName + ", photoExtention=" + photoExtention + ", interests=" + interests + "]";
+		return "Profile [id=" + id + ", user=" + user + ", address=" + address + ", phone=" + phone + ", school="
+				+ school + ", about=" + about + ", photoDirectory=" + photoDirectory + ", photoName=" + photoName
+				+ ", photoExtention=" + photoExtention + ", interests=" + interests + "]";
 	}
 
 }
