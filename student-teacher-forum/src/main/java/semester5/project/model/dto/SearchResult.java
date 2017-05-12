@@ -11,12 +11,14 @@ public class SearchResult {
 	private String firstname;
 	private String surname;
 	private Set<Interest> interests;
+	private String about;
 
 	public SearchResult(Profile profile) {
 		userId = profile.getUser().getId();
 		firstname = profile.getUser().getFirstname();
 		surname = profile.getUser().getSurname();
 		interests = profile.getInterests();
+		about = profile.getAbout();
 	}
 
 	public Long getUserId() {
@@ -51,10 +53,18 @@ public class SearchResult {
 		this.interests = interests;
 	}
 
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	@Override
 	public String toString() {
-		return "SerachResult [userId=" + userId + ", firstname=" + firstname + ", surname=" + surname + ", interests="
-				+ interests + "]";
+		return "SearchResult [userId=" + userId + ", firstname=" + firstname + ", surname=" + surname + ", interests="
+				+ interests + ", about=" + about + "]";
 	}
 
 }

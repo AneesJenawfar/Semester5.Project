@@ -4,52 +4,37 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<c:url var="postPhoto" value="/post-photo/${realpost.id}" />
+<c:url var="postPhoto" value="/post-photo/${post.id}" />
+<c:url var="viewposts" value="/viewpost" />
+
 <div class="row">
 	<div id="post-status"></div>
-	<div class="col-md-6">
+	<div class="col-md-6 col-md-offset-3">
 
-		<h1>Edit post</h1>
+		<h3>${post.title }</h3>
 
-		<form:form modelAttribute="post">
-			<div class="errors">
-				<form:errors path="text" />
-				<form:errors path="id" />
-				<form:errors path="updated" />
-				<form:errors path="title" />
-			</div>
-			<div class="form-group">
-				<label>Title </label>
-				<form:input path="title" type="text" class="form-control"
-					name="title" />
-			</div>
+		<p class="lead">by ${post.user.firstname} ${post.user.surname}</p>
+		<p>
+			<small> <span class="glyphicon glyphicon-time"></span> Posted
+				on <fmt:formatDate pattern="EEEE d MMMM y" value="${post.updated}" />
+				at <fmt:formatDate pattern="'at' HH:mm:s" value="${post.updated}" /></small>
+		</p>
+		<p>${post.text }</p>
 
-			<div class="form-group">
-				<label>Description<span class="require">*</span></label>
-				<form:textarea path="text" rows="5" class="form-control" name="text"></form:textarea>
-			</div>
+		<div class='postimage'>
 
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary">Create</button>
-
-			</div>
-
-		</form:form>
-	</div>
-	<div class='col-md-6 postimage'>
-		<c:if test="${realpost.hasPhoto == true}">
 			<div class="col-md-10 col-md-offset-2">
 				<img class="img-rounded img-responsive " id="postImage"
-					src="${postPhoto}" />
+					style="display: none;" src="${postPhoto}" />
 			</div>
-		</c:if>
-		<div class="text-center">
-			<a href="#" id="uploadLink">Link a Photo</a>
+			<div class="text-center">
+				<a href="#" id="uploadLink">Link a Photo</a>
+			</div>
 		</div>
+		<button type="button" class="btn btn-success pull-left"
+			onclick="location.href='${viewposts}'">Post</button>
 	</div>
-
-
-	<c:url value="/upload-post-photo/${realpost.id}" var="uploadPhoto" />
+	<c:url value="/upload-post-photo/${post.id}" var="uploadPhoto" />
 	<form method="post" enctype="multipart/form-data" id="photoUploadForm"
 		action="${uploadPhoto}">
 		<input type="file" accept="image/*" name="file" id="fileInput" /> <input
@@ -58,13 +43,9 @@
 	</form>
 </div>
 
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-<script>
-	tinymce.init({
-		selector : 'textarea',
-		plugins : "link"
-	});
 
+
+<script>
 	function setStatusText(text) {
 		$("#post-status").text(text);
 		window.setTimeout(function() {
@@ -72,6 +53,8 @@
 		}, 2000);
 	}
 	function uploadSuccess(data) {
+		var $yourUl = $("#postImage");
+		$yourUl.css("display", $yourUl.css("display") === 'none' ? '' : 'none');
 		$("#postImage").attr("src", "${postPhoto};time=" + new Date());
 		$("#fileInput").val("");
 		setStatusText(data.message)

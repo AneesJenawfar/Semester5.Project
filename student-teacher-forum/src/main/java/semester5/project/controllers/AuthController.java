@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,6 +52,12 @@ public class AuthController {
 	String verifyEmail() {
 		// this returns calling a tile definition
 		return "app.verifyemail";
+	}
+
+	private AppUser getUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		return userService.get(email);
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -117,6 +125,14 @@ public class AuthController {
 	@RequestMapping("/expiredtoken")
 	ModelAndView expiredToken(ModelAndView mav) {
 		mav.getModel().put("message", expiredMessage);
+		mav.setViewName("app.message");
+		return mav;
+	}
+
+	@RequestMapping("/close")
+	ModelAndView closeAccount(ModelAndView mav) {
+		AppUser user = getUser();
+		String password = user.getPlainPassword();
 		mav.setViewName("app.message");
 		return mav;
 	}

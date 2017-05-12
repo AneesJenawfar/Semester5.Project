@@ -1,29 +1,27 @@
 
 
 /* list of results */
-.result-name{
-	font-size: 1.1em;
-	font-weight: bold;
+
+.search-option{
+	margin-bottom: 10px;
 }
 
-.result-photo{
-	display: inline-block;
-	
+.profile-teaser-left {
+    float: left; width: 20%; margin-right: 1%;
+}
+.profile-img img {
+    width: 50%; height: auto;
 }
 
-.result-details{
-	display: inline-block;
-	margin-left: 20px;
+.profile-teaser-main {
+    float: left; width: 79%;
 }
 
-.person-row{
-	border: 1px solid gray;
-	margin-bottom: 1em;
-}
+.info { display: inline-block; margin-right: 10px; color: #777; }
+.info span { font-weight: bold; }
 
-.result-interest{
-	font-size: 1.0em;
-}
+
+
 
 
 div[role=status] {
@@ -40,42 +38,6 @@ div[role=status] {
 	font-size: 1.3em;
 	text-align: center;
 	
-}
-
-
-.box {
-	background: #fff;
-	transition: all 0.2s ease;
-	border: 2px dashed #dadada;
-	margin-top: 10px;
-	box-sizing: border-box;
-	border-radius: 5px;
-	background-clip: padding-box;
-	padding: 0 20px 20px 20px;
-	min-height: 340px;
-}
-
-.box:hover {
-	border: 2px solid #525C7A;
-}
-
-.box span.box-title {
-	color: #fff;
-	font-size: 24px;
-	font-weight: 300;
-	text-transform: uppercase;
-}
-
-.box .box-content {
-	padding: 16px;
-	border-radius: 0 0 2px 2px;
-	background-clip: padding-box;
-	box-sizing: border-box;
-}
-
-.box .box-content p {
-	color: #515c66;
-	text-transform: none;
 }
 
 .errors {
@@ -115,6 +77,28 @@ li.ui-state-default {
 
 
 
+	/* Comment */
+
+.edit-links{
+	margin-bottom: 50px;
+}
+
+.comment-dis{
+	border: solid;
+	border-radius: 10px;
+	padding-left: 5px;
+	border-width: 1px;
+}
+
+.com-text{
+	margin-left: 50px;	
+}
+
+ul#commentList {
+	border-bottom: 0.5px dotted black;
+	margin-left: 5px;
+	margin-right: 5px;
+}
 
 
 	/*Add Post*/
@@ -127,19 +111,7 @@ label small {
     font-weight: normal;
 }
 
-.postimage{
-	margin-top: 100px;
-}
-
-
-
-
 	/* View Post */
-.edit-links-delete{
-	margin-right: 50px;
-
-}
-
 
 
 
@@ -148,7 +120,19 @@ label small {
 
 
 	/* View Profile */
-	
+.request{
+	margin-bottom: 10px;
+}
+
+.reject{
+	margin-bottom: 10px;
+	margin-left: 5px;
+}
+
+.request:HOVER{
+	background-color: gray;
+	color: white;
+}
 	
 ul#interestList {
 	border: 0.5px dotted black;
@@ -157,10 +141,10 @@ ul#interestList {
 }
 
 ul.tagit>li.tagit-choice {
-	background-color: gray;
-	color: lime;
+	background-color: #c0c0c0;
+	color: #000080;
 	font-weight: bold;
-	box-shadow: 2px 2px 2px #888888;
+	box-shadow: 2px 2px 2px #808080;
 }
 
 ul#interestList a.tagit-close>span.text-icon {
@@ -217,12 +201,15 @@ ul#interestList a.tagit-close:hover>span.text-icon {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	text-align: center;
+	margin-bottom: 15px;
 }
 
 .profileimage{
 	margin-bottom: 10px;
-	width: 350px;
-	height: 400px;
+	margin-left:50px;
+	margin-right:50px;
+	width: 250px;
+	height: 275px;
 }
 
 .glyphicon {  margin-bottom: 10px;margin-right: 10px;}

@@ -1,16 +1,16 @@
 package semester5.project.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
-import javax.validation.Valid;
-
+import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +36,9 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 
+	@Autowired
+	private PolicyFactory htmlPolicy;
+
 	private AppUser getUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
@@ -45,9 +48,9 @@ public class CommentController {
 	@RequestMapping(value = "/comment", method = RequestMethod.GET)
 	public ModelAndView viewComments(ModelAndView mav, @RequestParam("id") Long id) {
 
-		Comment comment = new Comment();
+		// Comment comment = new Comment();
 		Post post = postService.get(id);
-		mav.getModel().put("comment", comment);
+		// mav.getModel().put("comment", comment);
 
 		List<Comment> comments = commentService.getComments(post);
 		mav.getModel().put("comments", comments);
@@ -57,36 +60,45 @@ public class CommentController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.POST)
-	public ModelAndView addComment(ModelAndView mav, @Valid Comment comment, @Valid Post post, BindingResult result) {
+	@RequestMapping(value = "/comments/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<Comment>> servePhoto(@PathVariable("id") Long id) throws IOException {
+		Post post = postService.get(id);
+		List<Comment> comments = commentService.getComments(post);
 
+		return new ResponseEntity<>(comments, HttpStatus.OK);
+	}
+
+	/*
+	 * @RequestMapping(value = "/comment", method = RequestMethod.POST) public
+	 * ModelAndView addComment(ModelAndView mav, @Valid Comment comment, @Valid
+	 * Post post, BindingResult result) {
+	 * 
+	 * AppUser user = getUser(); mav.setViewName("redirect:/"); if
+	 * (!result.hasErrors()) { comment.setUser(user); comment.setPost(post);
+	 * commentService.save(comment); mav.setViewName("redirect:/viewpost"); }
+	 * else { commentService.delete(comment.getId()); } return mav; }
+	 */
+	@RequestMapping(value = "/comment", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<List<Comment>> saveComment(@RequestParam("id") Long id, @RequestParam("text") String text) {
 		AppUser user = getUser();
-		mav.setViewName("redirect:/");
-		if (!result.hasErrors()) {
-			comment.setUser(user);
-			comment.setPost(post);
-			commentService.save(comment);
-			mav.setViewName("redirect:/viewpost");
-		} else {
-			commentService.delete(comment.getId());
-		}
-		return mav;
+		Post post = postService.get(id);
+		String cleanedText = htmlPolicy.sanitize(text);
+
+		Comment comment = new Comment(cleanedText);
+		comment.setUser(user);
+		comment.setPost(post);
+		commentService.save(comment);
+		List<Comment> comments = commentService.getComments(post);
+
+		return new ResponseEntity<>(comments, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/like", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> like(@RequestParam("id") Long id) {
 
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
-		System.out.println(id);
 		Post post = postService.get(id);
 		AppUser user = getUser();
 

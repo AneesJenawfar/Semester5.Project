@@ -26,11 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/","/about","/register","/confirmed","/invaliduser","/expiredtoken","/verifyemail","/search",
-							"/profile-photo/*").permitAll()
+							"/profile-photo/*","/search-surname","/search-interest").permitAll()
 				.antMatchers("/js/*","/css/*","/img/*").permitAll()
 				.antMatchers("/addpost","/editpost","/deletepost","/viewpost","/profile","/edit-profile","/upload-photo",
 							"/profile/*","/save-interest","/delete-interest","/comment", "/like", "/dislike",
-							"/upload-post-photo/*", "/post-photo/{id}").authenticated()
+							"/upload-post-photo/*", "/post-photo/{id}","/friend-status/*","/unfriend",
+							"/accept-request","/send-request").authenticated()
 				.anyRequest().denyAll()
 				/*.antMatchers("").hasRole("ADMIN")*/
 				.and()

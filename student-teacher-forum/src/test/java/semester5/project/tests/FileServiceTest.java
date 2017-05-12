@@ -32,7 +32,7 @@ public class FileServiceTest {
 	@Autowired
 	private FileService fileService;
 
-	@Value("${photo.upload.directory}")
+	@Value("${profile.photo.directory}")
 	private String photoUploadDirectory;
 
 	@Test

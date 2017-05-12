@@ -114,9 +114,12 @@ public class ProfileController {
 	public ModelAndView showProfile(@PathVariable("id") Long id) {
 
 		AppUser user = userService.get(id);
-
+		AppUser own = getUser();
 		ModelAndView mav = showProfile(user);
-		mav.getModel().put("owner", false);
+		Boolean access = false;
+		if (user == own)
+			access = true;
+		mav.getModel().put("owner", access);
 		return mav;
 	}
 

@@ -20,7 +20,7 @@ public class SearchService {
 	@Value("${results.pagesize}")
 	private int pageSize;
 
-	public Page<SearchResult> search(String text, int pageNumber) {
+	public Page<SearchResult> searchByInterest(String text, int pageNumber) {
 
 		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
 		Page<Profile> results = profileDao.findByInterestsNameContainingIgnoreCase(text, request);
@@ -31,7 +31,36 @@ public class SearchService {
 
 				return new SearchResult(profile);
 			}
+		};
+		return results.map(converter);
+	}
 
+	public Page<SearchResult> searchBySurname(String text, int pageNumber) {
+
+		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
+		Page<Profile> results = profileDao.findByUserSurnameContainingIgnoreCase(text, request);
+
+		Converter<Profile, SearchResult> converter = new Converter<Profile, SearchResult>() {
+
+			public SearchResult convert(Profile profile) {
+
+				return new SearchResult(profile);
+			}
+		};
+		return results.map(converter);
+	}
+
+	public Page<SearchResult> search(String text, int pageNumber) {
+
+		PageRequest request = new PageRequest(pageNumber - 1, pageSize);
+		Page<Profile> results = profileDao.findByUserFirstnameContainingIgnoreCase(text, request);
+
+		Converter<Profile, SearchResult> converter = new Converter<Profile, SearchResult>() {
+
+			public SearchResult convert(Profile profile) {
+
+				return new SearchResult(profile);
+			}
 		};
 		return results.map(converter);
 	}

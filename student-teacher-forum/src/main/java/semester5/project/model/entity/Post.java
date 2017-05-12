@@ -1,7 +1,5 @@
 package semester5.project.model.entity;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,8 +23,6 @@ import javax.validation.constraints.Size;
 import org.owasp.html.PolicyFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import semester5.project.model.dto.FileInfo;
-
 @Entity
 @Table(name = "post")
 public class Post {
@@ -49,15 +45,6 @@ public class Post {
 	@DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
 	private Date updated;
 
-	@Column(name = "photo_directory", length = 10)
-	private String photoDirectory;
-
-	@Column(name = "photo_name", length = 10)
-	private String photoName;
-
-	@Column(name = "photo_extention", length = 5)
-	private String photoExtention;
-
 	@ManyToOne(targetEntity = AppUser.class)
 	@JoinColumn(name = "user_id", nullable = false)
 	private AppUser user;
@@ -67,6 +54,9 @@ public class Post {
 			@JoinColumn(name = "user_id") })
 	@OrderColumn(name = "display_order")
 	private Set<AppUser> likes;
+
+	@Column(name = "photo_id")
+	private Boolean hasPhoto = false;
 
 	@PrePersist
 	protected void onCreate() {
@@ -135,48 +125,20 @@ public class Post {
 		this.likes = likes;
 	}
 
+	public Boolean getHasPhoto() {
+		return hasPhoto;
+	}
+
+	public void setHasPhoto(Boolean hasPhoto) {
+		this.hasPhoto = hasPhoto;
+	}
+
 	public void addLike(AppUser user) {
 		this.likes.add(user);
 	}
 
 	public void removeLike(AppUser user) {
 		likes.remove(user);
-	}
-
-	public String getPhotoDirectory() {
-		return photoDirectory;
-	}
-
-	public void setPhotoDirectory(String photoDirectory) {
-		this.photoDirectory = photoDirectory;
-	}
-
-	public String getPhotoName() {
-		return photoName;
-	}
-
-	public void setPhotoName(String photoName) {
-		this.photoName = photoName;
-	}
-
-	public String getPhotoExtention() {
-		return photoExtention;
-	}
-
-	public void setPhotoExtention(String photoExtention) {
-		this.photoExtention = photoExtention;
-	}
-
-	public void setPhotoDetails(FileInfo info) {
-		this.photoDirectory = info.getSubDirectory();
-		this.photoExtention = info.getExtention();
-		this.photoName = info.getBasename();
-	}
-
-	public Path getPhoto(String baseDirectory) {
-		if (photoName == null)
-			return null;
-		return Paths.get(baseDirectory, photoDirectory, photoName + "." + photoExtention);
 	}
 
 	@Override
@@ -231,6 +193,12 @@ public class Post {
 			this.text = htmlPolicy.sanitize(webPost.text);
 		if (webPost.title != null)
 			this.title = htmlPolicy.sanitize(webPost.title);
-
 	}
+
+	@Override
+	public String toString() {
+		return "Post [id=" + id + ", title=" + title + ", text=" + text + ", updated=" + updated + ", user=" + user
+				+ ", likes=" + likes + ", hasPhoto=" + hasPhoto + "]";
+	}
+
 }

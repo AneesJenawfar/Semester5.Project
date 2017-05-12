@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import javax.validation.Valid;
@@ -35,7 +34,9 @@ import semester5.project.exception.InvalidFileException;
 import semester5.project.model.dto.FileInfo;
 import semester5.project.model.entity.AppUser;
 import semester5.project.model.entity.Post;
+import semester5.project.model.entity.PostPhoto;
 import semester5.project.service.FileService;
+import semester5.project.service.PostPhotoService;
 import semester5.project.service.PostService;
 import semester5.project.service.UserService;
 import semester5.project.status.PhotoUploadStatus;
@@ -50,6 +51,9 @@ public class PostController {
 
 	@Autowired
 	private FileService fileService;
+
+	@Autowired
+	private PostPhotoService postPhotoService;
 
 	@Autowired
 	private PolicyFactory htmlPolicy;
@@ -83,14 +87,13 @@ public class PostController {
 
 	@RequestMapping(value = "/addpost", method = RequestMethod.POST)
 	ModelAndView addPost(ModelAndView mav, @Valid Post post, BindingResult result) {
-
 		AppUser user = getUser();
 		post.setUser(user);
 		mav.setViewName("app.addPost");
 		if (!result.hasErrors()) {
 			postService.save(post);
-			mav.getModel().put("post", new Post());
-			mav.setViewName("redirect:/viewpost");
+			mav.getModel().put("post", post);
+			mav.setViewName("app.addPhoto");
 		}
 		return mav;
 	}
@@ -108,6 +111,9 @@ public class PostController {
 
 	@RequestMapping(value = "/deletepost", method = RequestMethod.GET)
 	public ModelAndView deletePost(ModelAndView mav, @RequestParam(name = "id") Long id) {
+		Post post = postService.get(id);
+		PostPhoto postPhoto = postPhotoService.getPostPhoto(post);
+		postPhotoService.delete(postPhoto.getId());
 		postService.delete(id);
 		mav.setViewName("redirect:/viewpost");
 		return mav;
@@ -122,7 +128,6 @@ public class PostController {
 
 		mav.getModel().put("realpost", post);
 		mav.getModel().put("post", webPost);
-		mav.getModel().put("postId", id);
 		mav.setViewName("app.editPost");
 		return mav;
 	}
@@ -148,16 +153,20 @@ public class PostController {
 			@PathVariable("id") Long id) {
 
 		Post post = postService.get(id);
-
-		Path oldPhotoPath = post.getPhoto(postPhotoDirectory);
+		post.setHasPhoto(true);
+		PostPhoto postPhoto = postPhotoService.getPostPhoto(post);
+		if (postPhoto == null)
+			postPhoto = new PostPhoto();
+		postPhoto.setPost(post);
+		Path oldPhotoPath = postPhoto.getPhoto(postPhotoDirectory);
 
 		PhotoUploadStatus status = new PhotoUploadStatus(photoUploaded);
 
 		try {
 			FileInfo photoInfo = fileService.saveImageFile(file, postPhotoDirectory, "Photos", "P" + post.getId(), 400,
 					400);
-			post.setPhotoDetails(photoInfo);
-			postService.save(post);
+			postPhoto.setPhotoDetails(photoInfo);
+			postPhotoService.save(postPhoto);
 
 			if (oldPhotoPath != null)
 				Files.delete(oldPhotoPath);
@@ -179,13 +188,13 @@ public class PostController {
 	@RequestMapping(value = "/post-photo/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<InputStreamResource> servePhoto(@PathVariable("id") Long id) throws IOException {
-
 		Post post = postService.get(id);
+		PostPhoto postPhoto = postPhotoService.getPostPhoto(post);
 
-		Path photoPath = Paths.get(postPhotoDirectory, "Default", "Default.jpg");
+		Path photoPath = null;
 
-		if (post != null && post.getPhoto(postPhotoDirectory) != null)
-			photoPath = post.getPhoto(postPhotoDirectory);
+		if (postPhoto != null && postPhoto.getPhoto(postPhotoDirectory) != null)
+			photoPath = postPhoto.getPhoto(postPhotoDirectory);
 
 		return ResponseEntity.ok().contentLength(Files.size(photoPath))
 				.contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(photoPath.toString())))

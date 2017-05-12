@@ -34,11 +34,10 @@ public class PostService {
 
 	public void delete(Long id) {
 		postDao.delete(id);
-
 	}
 
 	public Post get(Long id) {
-
 		return postDao.findOne(id);
 	}
+
 }

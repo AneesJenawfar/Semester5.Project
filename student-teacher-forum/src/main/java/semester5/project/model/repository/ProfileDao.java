@@ -16,4 +16,8 @@ public interface ProfileDao extends CrudRepository<Profile, Long> {
 	List<Profile> findByInterestsNameContainingIgnoreCase(String text);
 
 	Page<Profile> findByInterestsNameContainingIgnoreCase(String text, Pageable request);
+
+	Page<Profile> findByUserSurnameContainingIgnoreCase(String text, Pageable request);
+
+	Page<Profile> findByUserFirstnameContainingIgnoreCase(String text, Pageable request);
 }

@@ -1,10 +1,17 @@
 package semester5.project.model.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
@@ -53,6 +60,12 @@ public class AppUser { // this the User Class
 
 	@Column(name = "role", length = 20)
 	private String role;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "my_friends", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "friend_id") })
+	@OrderColumn(name = "display_order")
+	private Set<Friend> friends;
 
 	public AppUser() {
 
@@ -138,6 +151,24 @@ public class AppUser { // this the User Class
 
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+
+	public Set<Friend> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<Friend> friends) {
+		this.friends = friends;
+	}
+
+	public void addFriend(Friend friend) {
+		this.friends.add(friend);
+
+	}
+
+	public void removeFriend(Friend friend) {
+		friends.remove(friend);
+
 	}
 
 	@Override

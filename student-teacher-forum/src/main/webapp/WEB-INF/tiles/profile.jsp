@@ -8,67 +8,11 @@
 <c:url var="editProfile" value="/edit-profile" />
 <c:url var="saveInterest" value="/save-interest" />
 <c:url var="deleteInterest" value="/delete-interest" />
-<%-- <div class="row">
-	<div class="col-md-10 col-md-offset-1">
-		<div id="profile-status"></div>
 
-		<div id="interest">
-			<ul id="interestList">
-				<c:choose>
-					<c:when test="${empty profile.interests} }">
-						<li>Add Your interest here</li>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="interest" items="${profile.interests}">
-							<li>${interest.name}</li>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</div>
-		<div class="profile-about">
-			<div class="profile-image">
-				<div>
-					<img id="profileImage" src="${profilePhoto}">
-				</div>
-				<div class="text-center">
-					<c:if test="${owner== true}">
-						<a href="#" id="uploadLink">Upload Photo</a>
-					</c:if>
-				</div>
-			</div>
-			<div class="profile-text">
-				<c:choose>
-					<c:when test="${profile.about==null}">A mischievous student wants to break
-				into a computer file, which is password-protected. Assume that there
-				are n passwords only one of which is correct, and that the student
-				tries possible passwords in a random order. Let N be the number of
-				trials required to break into the file. Determine the pmf ofmaster
-				file consists of 150,000 records. When a transaction file is run
-				against the master file, approximately 12,000 records are
-				updated.</c:when>
-					<c:otherwise>
-						${profile.about}
-					</c:otherwise>
-				</c:choose>
-			</div>
-		</div>
-		<div class="profile-edit">
-			<c:if test="${owner== true}">
-				<a href="${editProfile}">edit</a>
-			</c:if>
-
-		</div>
-
-		<c:url value="/upload-photo" var="uploadPhoto" />
-		<form method="post" enctype="multipart/form-data" id="photoUploadForm"
-			action="${uploadPhoto}">
-			<input type="file" accept="image/*" name="file" id="fileInput" /> <input
-				type="submit" value="upload" /> <input type="hidden"
-				name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</form>
-	</div>
-</div> --%>
+<c:url var="friendStatus" value="/friend-status/${user.id}" />
+<c:url var="sendRequest" value="/send-request" />
+<c:url var="acceptRequest" value="/accept-request" />
+<c:url var="disconnect" value="/unfriend" />
 
 <div class="row">
 	<div id="profile-status"></div>
@@ -86,14 +30,26 @@
 
 			<br />
 			<h4>${user.firstname}	${user.surname}</h4>
-			<small>${profile.address} <i
-				class="glyphicon glyphicon-map-marker"> </i>
-			</small>
+
+			<c:if test="${owner!= true}">
+				<button onclick="requestController(this.id);" id="request" type="button"
+					class="btn btn-secondary request"></button>
+				<button onclick="rejectRequest(this.id);" style="display: none;" id="reject" type="button" class="btn btn-danger reject">Reject</button>
+			</c:if>
+			
+			<c:if test="${profile.address!= null}">
+				<small><i class="glyphicon glyphicon-map-marker"> </i>${profile.address}
+				</small>
+			</c:if>
 			<p>
-				<i class="glyphicon glyphicon-envelope"></i>${user.email} <i
-					class="glyphicon glyphicon-phone"></i>${profile.phone}<br /> <i
-					class="glyphicon glyphicon-book"></i>${profile.school } <i
-					class="glyphicon glyphicon-calendar"></i>June 02, 1988<br />
+				<i class="glyphicon glyphicon-envelope"></i>${user.email}
+				<c:if test="${profile.phone!= null}">
+					<i class="glyphicon glyphicon-phone"></i>${profile.phone}<br />
+				</c:if>
+				<c:if test="${profile.school!= null}">
+					<i class="glyphicon glyphicon-book"></i>${profile.school }
+				</c:if>
+				<i class="glyphicon glyphicon-calendar"></i>June 02, 1988<br />
 			</p>
 			<strong><i>Interests </i><br>
 				<div id="interest">
@@ -109,7 +65,7 @@
 							</c:otherwise>
 						</c:choose>
 					</ul>
-				</div> </strong><br /> <strong><i>Personal Statement </i> </strong><br />
+				</div></strong><br /> <strong><i>Personal Statement </i> </strong><br />
 			<div class="profile-text">
 				<c:choose>
 					<c:when test="${profile.about==null}">A mischievous student wants to break
@@ -123,7 +79,8 @@
 			</div>
 			<c:if test="${owner== true}">
 				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-primary editprofile" onclick="location.href='${editProfile}'">Edit</button>
+					<button type="button" class="btn btn-primary editprofile"
+						onclick="location.href='${editProfile}'">Edit</button>
 				</div>
 			</c:if>
 
@@ -197,7 +154,82 @@
 		});
 	}
 
+	function getFriendStatus() {
+		var result = $.ajax({
+			type : "GET",
+			url : "${friendStatus}",
+			data : {
+				"id" : "${user.id}"
+			},
+			success : function(data) {
+				$("#request").text(data);
+				if (data=="Accept Request"){
+					$("#reject").toggle();
+				}
+			}
+		});
+	}
+
+	function editRequest(id, actionUrl) {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+			jqXHR.setRequestHeader(header, token);
+		});
+		$.ajax({
+			'url' : actionUrl,
+			data : {
+				'id' : id
+			},
+			type : 'POST',
+			success : function() {
+				//alert("ok");
+			},
+			error : function() {
+				//alert("error");
+			}
+		});
+	}
+
+	function rejectRequest(id) {
+		event.preventDefault();
+		var el = document.getElementById(id);
+		editRequest("${user.id}", "${disconnect}");
+		$("#reject").toggle();
+		el.value     = "Connect";
+	    el.innerHTML = "Connect";
+	}
+	
+	function requestController(id) {
+		event.preventDefault();
+		var status = $("#request").text();
+		var el = document.getElementById(id);
+		if (status == "Connect") {
+			editRequest("${user.id}", "${sendRequest}");
+			el.value     = "Request Sent";
+		    el.innerHTML = "Request Sent";
+
+		} else if (status == "Accept Request") {
+			editRequest("${user.id}", "${acceptRequest}");
+			$("#reject").toggle();
+			el.value     = "Connected";
+		    el.innerHTML = "Connected";
+
+		} else if (status == "Request Sent") {
+			editRequest("${user.id}", "${disconnect}");
+			el.value     = "Connect";
+		    el.innerHTML = "Connect";
+
+		} else if (status == "Connected") {
+			editRequest("${user.id}", "${disconnect}");
+			el.value     = "Connect";
+		    el.innerHTML = "Connect";
+		}
+	}
+
 	$(document).ready(function() {
+		getFriendStatus();
 
 		$("#interestList").tagit({
 
