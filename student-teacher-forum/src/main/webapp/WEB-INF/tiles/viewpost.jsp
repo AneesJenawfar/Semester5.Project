@@ -7,6 +7,7 @@
 <c:set var="url" value="/viewpost" />
 <c:url var="likepath" value="/like" />
 <c:url var="dislikepath" value="/dislike" />
+<c:url var="share" value="/share" />
 
 <div class="row">
 
@@ -17,7 +18,7 @@
 			<h1 class="page-header">Posts</h1>
 
 			<pgn:pagination url="${url}" page="${page}" size="5" />
-
+			
 
 			<c:forEach var="post" items="${page.content}">
 				<c:url var="edit" value="/editpost?id=${post.id}" />
@@ -26,10 +27,12 @@
 				<c:url var="profileLink" value="/profile/${post.user.id}" />
 				<c:url var="postPhoto" value="/post-photo/${post.id}" />
 				<div class="row">
+					<div class="post-status" id="s${post.id}"></div>
 					<h3>
 						<a href="${comments}">${post.title }</a>
 					</h3>
 				</div>
+
 				<p class="lead">
 					by <a href="${profileLink}">${post.user.firstname}
 						${post.user.surname}</a>
@@ -68,7 +71,8 @@
 							onclick="like(this.id,event)">Like</a> <a
 							style="display: ${hideDislike}" href="#" id="d${post.id}"
 							onclick="dislike(this.id,event)">Dislike</a> | <a
-							href="${comments}">Comment</a>
+							href="${comments}">Comment</a>| <a href="#" id="${post.id}"
+							onclick="share(this.id, event)">Share</a>
 					</div>
 				</div>
 			</c:forEach>
@@ -135,6 +139,13 @@
 		this.pereventDefault();
 	}
 
+	function share(id, event) {
+		event.preventDefault();
+		var n = Number(id);
+		editLikes(n, "${share}");
+		this.pereventDefault();
+	}
+
 	function editLikes(id, actionUrl) {
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
@@ -149,8 +160,11 @@
 				'id' : id
 			},
 			type : 'POST',
-			success : function() {
-				//alert("ok");
+			success : function(data) {
+				$('#s'.concat(id)).text(data.message);
+				window.setTimeout(function() {
+					$('#s'.concat(id)).text("");
+				}, 2000);
 			},
 			error : function() {
 				//alert("error");
@@ -160,6 +174,5 @@
 	}
 
 	$(document).ready(function() {
-
 	});
 </script>

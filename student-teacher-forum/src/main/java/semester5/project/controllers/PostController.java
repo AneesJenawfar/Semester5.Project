@@ -39,7 +39,7 @@ import semester5.project.service.FileService;
 import semester5.project.service.PostPhotoService;
 import semester5.project.service.PostService;
 import semester5.project.service.UserService;
-import semester5.project.status.PhotoUploadStatus;
+import semester5.project.status.ActionStatus;
 
 @Controller
 public class PostController {
@@ -149,7 +149,7 @@ public class PostController {
 
 	@RequestMapping(value = "/upload-post-photo/{id}", method = RequestMethod.POST)
 	@ResponseBody // Return Data JSON format
-	public ResponseEntity<PhotoUploadStatus> handlePhotoUpload(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<ActionStatus> handlePhotoUpload(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") Long id) {
 
 		Post post = postService.get(id);
@@ -160,7 +160,7 @@ public class PostController {
 		postPhoto.setPost(post);
 		Path oldPhotoPath = postPhoto.getPhoto(postPhotoDirectory);
 
-		PhotoUploadStatus status = new PhotoUploadStatus(photoUploaded);
+		ActionStatus status = new ActionStatus(photoUploaded);
 
 		try {
 			FileInfo photoInfo = fileService.saveImageFile(file, postPhotoDirectory, "Photos", "P" + post.getId(), 400,

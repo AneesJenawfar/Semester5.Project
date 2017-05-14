@@ -85,36 +85,36 @@
 				style="display: ${hideDislike}" href="#" id="d${post.id}"
 				onclick="dislike(this.id,event)">Dislike</a>
 		</div>
-		<br /> <br />
-		<%-- <div class="widget-area no-padding blank">
+		<br /> <br /> <br>
+		<div id="comment-container">
+			<c:forEach var="com" items="${comments}">
+				<div class="comment-dis">
+					<h4>
+						${com.user.firstname} ${com.user.surname} says: <small
+							class="pull-right date">on &nbsp;<fmt:formatDate
+								pattern="d MM y" value="${com.added}" /> <fmt:formatDate
+								pattern="HH:mm:s" value="${com.added}" />
+						</small>
+					</h4>
+					<div class="com-text">
+						<p>${com.text}</p>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+		<div class="widget-area no-padding blank">
 			<div class="status-upload">
-				<form:form modelAttribute="comment">
-					<form:textarea path="text" class="form-control" name="text"
-						rows="5"></form:textarea>
-					<button type="submit" class="btn btn-success green">
-						<i class="fa fa-share"></i> Comment
-					</button>
-				</form:form>
+
+				<textarea class="form-control" name="text" id="text" rows="5"></textarea>
+				<button type="button" id="commenting" class="btn btn-success green">
+					<i class="fa fa-share"></i> Comment
+				</button>
+
 			</div>
 		</div>
-		<br>
-		<c:forEach var="com" items="${comments}">
-			<div class="comment-dis">
-				<h4 >
-					 ${com.user.firstname}
-					${com.user.surname} says: <small> <fmt:formatDate
-							pattern="HH:mm:s" value="${com.added}" /> on <fmt:formatDate
-							pattern="EEEE d MMMM y" value="${com.added}" />
-					</small>
-				</h4>
-				<div class="com-text">
-					<p>${com.text}</p>
-				</div>
-			</div>
-		</c:forEach>
-		 --%>
 
 
+		<%-- 
 		<div id="comment">
 			<ul id="commentList">
 				<c:choose>
@@ -138,7 +138,7 @@
 					</c:otherwise>
 				</c:choose>
 			</ul>
-		</div>
+		</div> --%>
 		<br />
 	</div>
 </div>
@@ -146,57 +146,6 @@
 
 
 <script>
-	function setStatusText(text) {
-		$("#profile-status").text(text);
-		window.setTimeout(function() {
-			$("#profile-status").text("");
-		}, 2000);
-	}
-	function uploadSuccess(data) {
-		$("#profileImage").attr("src", "${profilePhoto};time=" + new Date());
-		$("#fileInput").val("");
-		setStatusText(data.message)
-	}
-
-	function uploadPhoto(event) {
-		$.ajax({
-			url : $(this).attr("action"),
-			type : 'POST',
-			data : new FormData(this),
-			processData : false,
-			contentType : false,
-			success : uploadSuccess,
-			error : function() {
-				setStatusText("Server Error.");
-			}
-		});
-		event.preventDefault();
-	}
-
-	function saveComment(text, actionUrl, postId) {
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-
-		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-			jqXHR.setRequestHeader(header, token);
-		});
-
-		$.ajax({
-			'url' : actionUrl,
-			data : {
-				'text' : text,
-				'id' : postId
-			},
-			type : 'POST',
-			success : function() {
-				//alert("ok");
-			},
-			error : function() {
-				//alert("error");
-			}
-		});
-	}
-
 	function like(lid, event) {
 		event.preventDefault();
 		$('#'.concat(lid)).toggle(1000);
@@ -240,29 +189,65 @@
 		});
 	}
 
-	$(document).ready(function() {
+	function dateFormat(d) {
+		var myDate = ("00" + (d.getMonth() + 1)).slice(-2) + "/"
+				+ ("00" + d.getDate()).slice(-2) + "/" + d.getFullYear() + " "
+				+ ("00" + d.getHours()).slice(-2) + ":"
+				+ ("00" + d.getMinutes()).slice(-2) + ":"
+				+ ("00" + d.getSeconds()).slice(-2);
+		return myDate
+	}
 
-		$("#commentList").tagit({
+	function saveComment(text, actionUrl, postId) {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 
-			afterTagAdded : function(event, ui) {
-				if (ui.duringInitialization != true)
-					saveComment(ui.tagLabel, "${saveComment}", "${post.id}");
-			},
-			caseSensitive : false,
-			allowSpaces : true,
-			tagLimit : 10,
-		/* readOnly : '${owner}' == 'false' */
+		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+			jqXHR.setRequestHeader(header, token);
 		});
 
-	});
-</script>
+		$.ajax({
+			'url' : actionUrl,
+			data : {
+				'text' : text,
+				'id' : postId
+			},
+			type : 'POST',
+			success : function() {
+				//alert("ok");
+			},
+			error : function() {
+				//alert("error");
+			}
+		});
+	}
 
+	function addComment() {
+		var text = $("#text").val();
+		if (text != "") {
+			saveComment(text, "${saveComment}", "${post.id}");
 
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
-<%-- <script src="${contextRoot}/js/tinymce.min.js"></script> --%>
-<script>
-	tinymce.init({
-		selector : 'textarea',
-		plugins : "link"
+			var d = new Date();
+			var myDate = dateFormat(d);
+			var element = $('<div class="comment-dis"><h4>'
+					+ "${user.firstname}"
+					+ '&nbsp;'
+					+ "${user.surname}"
+					+ '&nbsp; says: &nbsp;<small class="pull-right date">on &nbsp;'
+					+ myDate + '</small></h4><div class="com-text"><p>' + text
+					+ '</p></div></div>');
+			$("#comment-container").append(element);
+			$("#text").val('');
+		}else{
+			alert("Please enter a valid comment");
+		}
+	}
+
+	$(document).ready(function() {
+
+		$("#commenting").click(function(event) {
+			event.preventDefault();
+			addComment();
+		});
 	});
 </script>

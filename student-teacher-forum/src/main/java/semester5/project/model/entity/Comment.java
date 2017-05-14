@@ -26,7 +26,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Size(min = 2, max = 255, message = "{addpost.text.size}")
+	@Size(min = 1, max = 255, message = "{addpost.text.size}")
 	@Column(name = "text")
 	private String text;
 

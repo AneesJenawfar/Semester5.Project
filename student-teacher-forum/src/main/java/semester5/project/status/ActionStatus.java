@@ -1,10 +1,10 @@
 package semester5.project.status;
 
-public class PhotoUploadStatus {
+public class ActionStatus {
 
 	private String message;
 
-	public PhotoUploadStatus(String message) {
+	public ActionStatus(String message) {
 		this.message = message;
 	}
 
@@ -14,6 +14,11 @@ public class PhotoUploadStatus {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "ActionStatus [message=" + message + "]";
 	}
 
 }

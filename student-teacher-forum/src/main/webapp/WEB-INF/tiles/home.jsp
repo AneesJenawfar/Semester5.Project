@@ -9,9 +9,11 @@
 
 <sec:authorize access="!isAuthenticated()">
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2 text-center"> Welcome to AccaForum</div>
+		<div class="col-md-8 col-md-offset-2 text-center">Welcome to
+			AccaForum</div>
 	</div>
 </sec:authorize>
+<div id="notify-drop"></div>
 <%-- <sec:authorize access="isAuthenticated()">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2 text-center">
@@ -42,3 +44,32 @@
 		</div>
 	</div>
 </sec:authorize> --%>
+
+<script type="text/javascript">
+		function print(data) {
+			for (var i = 0; i < data.length; i++) {
+				$('#notify-drop').append($('<li><a href="#">' + data[0].firstArray.firstKey
+						+ '</a></li>'));
+				$('#notify-drop').append($('<li><a href="#">' + data[0].secondArray.secondKey
+						+ '</a></li>'));
+			}
+		}
+
+		$(document).ready(function() {
+
+			var data = {
+				"array" : [ {
+					"firstArray" : {
+						"firstKey" : "firstValue",
+						"secondKey" : "secondValue"
+					}
+				}, {
+					"secondArray" : {
+						"firstKey" : "firstValue",
+						"secondKey" : "secondValue"
+					}
+				} ]
+			};
+			print(data);
+		});
+	</script>

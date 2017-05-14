@@ -22,6 +22,9 @@
 <title><tiles:insertAttribute name="title" /></title>
 <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 <c:set var="search" value="/search" />
+<c:url var="notify" value="/notify" />
+<c:url var="comment" value="${contextRoot}/comment" />
+<c:url var="notification" value="${contextRoot}/notifications" />
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -86,6 +89,16 @@
 
 			<sec:authorize access="isAuthenticated()">
 				<ul class="nav navbar-nav navbar-right">
+
+
+
+					<li class="dropdown"><a id="not-link" href="#"
+						class="dropdown-toggle" data-toggle="dropdown" role="button">Notifications<span
+							id="notification_count">3</span></a>
+						<ul id="notify-drop" class="dropdown-menu">
+
+						</ul></li>
+
 					<li><a href="${contextRoot}/profile">Profile</a></li>
 					<li><a href="javascript:$('#logoutform').submit();">Logout</a></li>
 				</ul>
@@ -106,10 +119,108 @@
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
 	</form>
+
 	<div class="container">
 		<tiles:insertAttribute name="content" />
 	</div>
-
 	<script src="${contextRoot}/js/bootstrap.min.js"></script>
+
+
+
+
+	<script>
+		function getnotify(actionurl) {
+
+			$.ajax({
+				type : "GET",
+				url : actionurl,
+				success : function(data) {
+					result = data;
+					printx(result);
+				}
+			});
+
+		}
+		
+		function dateFormat(d){
+			var myDate = ("00" + (d.getMonth() + 1)).slice(-2) + "/"
+			+ ("00" + d.getDate()).slice(-2) + "/"
+			+ d.getFullYear() + " "
+			+ ("00" + d.getHours()).slice(-2) + ":"
+			+ ("00" + d.getMinutes()).slice(-2) + ":"
+			+ ("00" + d.getSeconds()).slice(-2);
+			return myDate
+		}
+
+		function printx(x) {
+			$("#notify-drop").empty();
+			x.forEach(function(item) {
+				var url = "${comment}?id=" + item.post.id;
+
+				if (item.action == "like") {
+
+					var d = new Date(item.time);
+					var myDate = dateFormat(d);
+					var element = $('<li><a href="'+url+'">'
+							+ item.attacker.firstname + '&nbsp;'
+							+ item.attacker.surname
+							+ '&nbsp; has liked your post &nbsp;' + '&quot;'
+							+ item.post.title
+							+ '&quot; &nbsp; <small>on &nbsp;' + myDate
+							+ '</small></a></li>');
+					$("#notify-drop").append(element);
+
+				} else if (item.action == "share") {
+
+					var d = new Date(item.time);
+					var myDate = dateFormat(d);
+					var element = $('<li><a href="'+url+'">'
+							+ item.attacker.firstname + '&nbsp;'
+							+ item.attacker.surname
+							+ '&nbsp; has shared your post &nbsp;' + '&quot;'
+							+ item.post.title
+							+ '&quot; &nbsp; <small>on &nbsp;' + myDate
+							+ '</small></a></li>');
+					$("#notify-drop").append(element);
+				} else if (item.action == "shared") {
+
+					var d = new Date(item.time);
+					var myDate = dateFormat(d);
+					var element = $('<li><a href="'+url+'">'
+							+ item.attacker.firstname + item.attacker.surname
+							+ 'has shared a post' + '&quot;' + item.post.title
+							+ '&quot; with you &nbsp; <small>on &nbsp;'
+							+ myDate + '</small></a></li>');
+					$("#notify-drop").append(element);
+
+				} else if (item.action == "shared") {
+
+					var d = new Date(item.time);
+					var myDate = dateFormat(d);
+					var element = $('<li><a href="'+url+'">'
+							+ item.attacker.firstname + '&nbsp;'
+							+ item.attacker.surname
+							+ '&nbsp; has commented on your post &nbsp;'
+							+ '&quot;' + item.post.title
+							+ '&quot;&nbsp; <small>on &nbsp;' + myDate
+							+ '</small></a></li>');
+					$("#notify-drop").append(element);
+				}
+			});
+			var all = "${notification}";
+			var element = $('<li><a id="notificationFooter" href="'+all+'">See All</a></li>');
+			$("#notify-drop").append(element);
+		}
+
+		$(document).ready(function() {
+
+			$("#not-link").click(function(event) {
+				event.preventDefault();
+				getnotify('${notify}');
+
+			});
+		});
+	</script>
+
 </body>
 </html>

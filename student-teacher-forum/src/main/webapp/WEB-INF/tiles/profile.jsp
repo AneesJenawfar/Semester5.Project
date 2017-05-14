@@ -13,11 +13,13 @@
 <c:url var="sendRequest" value="/send-request" />
 <c:url var="acceptRequest" value="/accept-request" />
 <c:url var="disconnect" value="/unfriend" />
+	
 
 <div class="row">
 	<div id="profile-status"></div>
 	<div class="col-md-6 col-md-offset-3 profilebox">
 		<div class="row">
+
 			<div class="col-md-10 col-md-offset-2">
 				<img class="img-rounded img-responsive profileimage"
 					id="profileImage" src="${profilePhoto}" />
@@ -29,14 +31,15 @@
 			</div>
 
 			<br />
-			<h4>${user.firstname}	${user.surname}</h4>
+			<h4>${user.firstname}${user.surname}</h4>
 
 			<c:if test="${owner!= true}">
-				<button onclick="requestController(this.id);" id="request" type="button"
-					class="btn btn-secondary request"></button>
-				<button onclick="rejectRequest(this.id);" style="display: none;" id="reject" type="button" class="btn btn-danger reject">Reject</button>
+				<button onclick="requestController(this.id);" id="request"
+					type="button" class="btn btn-secondary request"></button>
+				<button onclick="rejectRequest(this.id);" style="display: none;"
+					id="reject" type="button" class="btn btn-danger reject">Reject</button>
 			</c:if>
-			
+
 			<c:if test="${profile.address!= null}">
 				<small><i class="glyphicon glyphicon-map-marker"> </i>${profile.address}
 				</small>
@@ -163,7 +166,7 @@
 			},
 			success : function(data) {
 				$("#request").text(data);
-				if (data=="Accept Request"){
+				if (data == "Accept Request") {
 					$("#reject").toggle();
 				}
 			}
@@ -197,34 +200,34 @@
 		var el = document.getElementById(id);
 		editRequest("${user.id}", "${disconnect}");
 		$("#reject").toggle();
-		el.value     = "Connect";
-	    el.innerHTML = "Connect";
+		el.value = "Connect";
+		el.innerHTML = "Connect";
 	}
-	
+
 	function requestController(id) {
 		event.preventDefault();
 		var status = $("#request").text();
 		var el = document.getElementById(id);
 		if (status == "Connect") {
 			editRequest("${user.id}", "${sendRequest}");
-			el.value     = "Request Sent";
-		    el.innerHTML = "Request Sent";
+			el.value = "Request Sent";
+			el.innerHTML = "Request Sent";
 
 		} else if (status == "Accept Request") {
 			editRequest("${user.id}", "${acceptRequest}");
 			$("#reject").toggle();
-			el.value     = "Connected";
-		    el.innerHTML = "Connected";
+			el.value = "Connected";
+			el.innerHTML = "Connected";
 
 		} else if (status == "Request Sent") {
 			editRequest("${user.id}", "${disconnect}");
-			el.value     = "Connect";
-		    el.innerHTML = "Connect";
+			el.value = "Connect";
+			el.innerHTML = "Connect";
 
 		} else if (status == "Connected") {
 			editRequest("${user.id}", "${disconnect}");
-			el.value     = "Connect";
-		    el.innerHTML = "Connect";
+			el.value = "Connect";
+			el.innerHTML = "Connect";
 		}
 	}
 

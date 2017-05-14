@@ -66,4 +66,8 @@
   <definition name="app.addPhoto" extends="app.default">
     <put-attribute name="content" value="/WEB-INF/tiles/addphoto.jsp" />
   </definition>
+  
+  <definition name="app.notification" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/notification.jsp" />
+  </definition>
 </tiles-definitions>

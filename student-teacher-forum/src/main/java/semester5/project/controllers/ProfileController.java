@@ -38,7 +38,7 @@ import semester5.project.service.FileService;
 import semester5.project.service.InterestService;
 import semester5.project.service.ProfileService;
 import semester5.project.service.UserService;
-import semester5.project.status.PhotoUploadStatus;
+import semester5.project.status.ActionStatus;
 
 @Controller
 public class ProfileController {
@@ -156,14 +156,14 @@ public class ProfileController {
 
 	@RequestMapping(value = "/upload-photo", method = RequestMethod.POST)
 	@ResponseBody // Return Data JSON format
-	public ResponseEntity<PhotoUploadStatus> handlePhotoUpload(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<ActionStatus> handlePhotoUpload(@RequestParam("file") MultipartFile file) {
 
 		AppUser user = getUser();
 		Profile profile = profileService.getUserProfile(user);
 
 		Path oldPhotoPath = profile.getPhoto(photoUploadDirectory);
 
-		PhotoUploadStatus status = new PhotoUploadStatus(photoUploaded);
+		ActionStatus status = new ActionStatus(photoUploaded);
 
 		try {
 			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "Photos", "P" + user.getId(),
