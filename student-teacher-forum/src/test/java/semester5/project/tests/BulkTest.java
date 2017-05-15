@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.transaction.Transactional;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import semester5.project.App;
 import semester5.project.model.entity.AppUser;
@@ -73,7 +72,7 @@ public class BulkTest {
 	@Test
 	public void createTestData() throws IOException {
 		Random random = new Random();
-		List<String> names = loadFile(nameFile, 25);
+		List<String> names = loadFile(nameFile, 35);
 		List<String> interests = loadFile(interestsFile, 25);
 
 		for (int i = 0; i < 200; i++) {

@@ -1,5 +1,6 @@
 package semester5.project.model.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -13,4 +14,5 @@ public interface PostNotificationDao extends CrudRepository<PostNotification, Lo
 
 	List<PostNotification> findFirst10ByTargetUserOrderByTimeDesc(AppUser user);
 
+	List<PostNotification> findByTimeBeforeAndTargetUser(Date time, AppUser targetUser);
 }

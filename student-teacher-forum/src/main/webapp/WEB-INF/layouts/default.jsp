@@ -25,6 +25,9 @@
 <c:url var="notify" value="/notify" />
 <c:url var="comment" value="${contextRoot}/comment" />
 <c:url var="notification" value="${contextRoot}/notifications" />
+<c:url var="getchat" value="${contextRoot}/chat-list" />
+<c:url var="chat" value="/chats" />
+<c:url var="allusers" value="/all" />
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -52,18 +55,16 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="${contextRoot}/">HOME <span
-						class="sr-only">(current)</span></a></li>
-				<li><a href="${contextRoot}/about">About</a></li>
-
+				<sec:authorize access="!isAuthenticated()">
+					<li class="active"><a href="${contextRoot}/">HOME <span
+							class="sr-only">(current)</span></a></li>
+				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false">Post <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="${contextRoot}/viewpost">View Posts </a></li>
-							<li><a href="${contextRoot}/addpost">Create Post</a></li>
-						</ul></li>
+					<li><a href="${contextRoot}/viewpost">Home </a></li>
+				</sec:authorize>
+				<li><a href="${contextRoot}/about">About</a></li>
+				<sec:authorize access="isAuthenticated()">
+					<li><a href="${contextRoot}/addpost">Add Post</a></li>
 				</sec:authorize>
 
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -90,15 +91,16 @@
 			<sec:authorize access="isAuthenticated()">
 				<ul class="nav navbar-nav navbar-right">
 
-
+					<li class="dropdown"><a id="chat-link" href="#"
+						class="dropdown-toggle" data-toggle="dropdown" role="button">Chats</a>
+						<ul id="chat-drop" class="dropdown-menu">
+						</ul></li>
 
 					<li class="dropdown"><a id="not-link" href="#"
 						class="dropdown-toggle" data-toggle="dropdown" role="button">Notifications<span
 							id="notification_count">3</span></a>
 						<ul id="notify-drop" class="dropdown-menu">
-
 						</ul></li>
-
 					<li><a href="${contextRoot}/profile">Profile</a></li>
 					<li><a href="javascript:$('#logoutform').submit();">Logout</a></li>
 				</ul>
@@ -125,12 +127,8 @@
 	</div>
 	<script src="${contextRoot}/js/bootstrap.min.js"></script>
 
-
-
-
 	<script>
 		function getnotify(actionurl) {
-
 			$.ajax({
 				type : "GET",
 				url : actionurl,
@@ -139,16 +137,14 @@
 					printx(result);
 				}
 			});
-
 		}
-		
-		function dateFormat(d){
+
+		function dateFormat(d) {
 			var myDate = ("00" + (d.getMonth() + 1)).slice(-2) + "/"
-			+ ("00" + d.getDate()).slice(-2) + "/"
-			+ d.getFullYear() + " "
-			+ ("00" + d.getHours()).slice(-2) + ":"
-			+ ("00" + d.getMinutes()).slice(-2) + ":"
-			+ ("00" + d.getSeconds()).slice(-2);
+					+ ("00" + d.getDate()).slice(-2) + "/" + d.getFullYear()
+					+ " " + ("00" + d.getHours()).slice(-2) + ":"
+					+ ("00" + d.getMinutes()).slice(-2) + ":"
+					+ ("00" + d.getSeconds()).slice(-2);
 			return myDate
 		}
 
@@ -168,7 +164,7 @@
 							+ item.post.title
 							+ '&quot; &nbsp; <small>on &nbsp;' + myDate
 							+ '</small></a></li>');
-					$("#notify-drop").append(element);
+					$("#notify-drop").prepend(element);
 
 				} else if (item.action == "share") {
 
@@ -181,7 +177,7 @@
 							+ item.post.title
 							+ '&quot; &nbsp; <small>on &nbsp;' + myDate
 							+ '</small></a></li>');
-					$("#notify-drop").append(element);
+					$("#notify-drop").prepend(element);
 				} else if (item.action == "shared") {
 
 					var d = new Date(item.time);
@@ -191,9 +187,9 @@
 							+ 'has shared a post' + '&quot;' + item.post.title
 							+ '&quot; with you &nbsp; <small>on &nbsp;'
 							+ myDate + '</small></a></li>');
-					$("#notify-drop").append(element);
+					$("#notify-drop").prepend(element);
 
-				} else if (item.action == "shared") {
+				} else if (item.action == "comment") {
 
 					var d = new Date(item.time);
 					var myDate = dateFormat(d);
@@ -204,12 +200,37 @@
 							+ '&quot;' + item.post.title
 							+ '&quot;&nbsp; <small>on &nbsp;' + myDate
 							+ '</small></a></li>');
-					$("#notify-drop").append(element);
+					$("#notify-drop").prepend(element);
 				}
 			});
 			var all = "${notification}";
 			var element = $('<li><a id="notificationFooter" href="'+all+'">See All</a></li>');
 			$("#notify-drop").append(element);
+		}
+
+		function printchats(x) {
+
+			$("#chat-drop").empty();
+			x.forEach(function(item) {
+				var url = "${chat}?id=" + item.id;
+				var element = $('<li><a href="'+url+'">' + item.firstname
+						+ '&nbsp;' + item.surname + '</a></li>');
+				$("#chat-drop").append(element);
+			});
+			var all = "${allusers}";
+			var element = $('<li><a id="notificationFooter" href="'+all+'">Start a new chat</a></li>');
+			$("#chat-drop").append(element);
+		}
+
+		function getchat(actionurl) {
+			$.ajax({
+				type : "GET",
+				url : actionurl,
+				success : function(data) {
+					result = data;
+					printchats(result);
+				}
+			});
 		}
 
 		$(document).ready(function() {
@@ -219,6 +240,14 @@
 				getnotify('${notify}');
 
 			});
+
+			$("#chat-link").click(function(event) {
+
+				event.preventDefault();
+				getchat('${getchat}');
+
+			});
+
 		});
 	</script>
 

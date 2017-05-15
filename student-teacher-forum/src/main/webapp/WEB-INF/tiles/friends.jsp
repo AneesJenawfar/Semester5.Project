@@ -2,30 +2,17 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pgn"%>
-<c:set var="searchUrl" value="/search?s=${s}" />
+<c:set var="url" value="/all" />
 
 <div class="row">
-	<div class="search-option">
-		<strong>Search &quot;${s}&quot; By:</strong> <span
-			style="display: inline-block; width: YOURWIDTH;"></span>
-
-		<button type="button" class="btn btn-primary" id="firstname"
-			onclick="location.href='/search?s=${s}'">First Name</button>
-
-		<button type="button" class="btn btn-primary" id = "surname"
-			onclick="location.href='/search-surname?s=${s}'">Surname</button>
-
-		<button type="button" class="btn btn-primary" id = "interest"
-			onclick="location.href='/search-interest?s=${s}'">Interest</button>
-	</div>
 	<div class="col-md-12 results-noresult">
 		<c:if test="${empty page.content}"> 
-    		No Results 
+    		No Users
 		</c:if>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<pgn:pagination url="${searchUrl}" page="${page}" size="10" />
+			<pgn:pagination url="${url}" page="${page}" size="10" />
 		</div>
 	</div>
 
@@ -70,18 +57,3 @@
 		</div>
 	</c:forEach>
 </div>
-<script>
-
-	$(document).ready(function() {
-		if("${type}"=="firstname"){
-			$("#firstname").removeClass("btn btn-primary").addClass("btn btn-secondary");
-		}
-		if("${type}"=="surname"){
-			$("#surname").removeClass("btn btn-primary").addClass("btn btn-secondary");
-		}
-		if("${type}"=="interest"){
-			$("#interest").removeClass("btn btn-primary").addClass("btn btn-secondary");
-		}
-		
-	});
-</script>

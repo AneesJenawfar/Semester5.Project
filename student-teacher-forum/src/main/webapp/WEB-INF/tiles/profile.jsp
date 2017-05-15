@@ -13,7 +13,8 @@
 <c:url var="sendRequest" value="/send-request" />
 <c:url var="acceptRequest" value="/accept-request" />
 <c:url var="disconnect" value="/unfriend" />
-	
+<c:url var="chat" value="/chats?id=${user.id}" />
+
 
 <div class="row">
 	<div id="profile-status"></div>
@@ -36,8 +37,12 @@
 			<c:if test="${owner!= true}">
 				<button onclick="requestController(this.id);" id="request"
 					type="button" class="btn btn-secondary request"></button>
+
 				<button onclick="rejectRequest(this.id);" style="display: none;"
 					id="reject" type="button" class="btn btn-danger reject">Reject</button>
+
+				<button onclick="location.href='${chat}'" id="chat" type="button"
+					class="btn btn-primary chat">Message</button>
 			</c:if>
 
 			<c:if test="${profile.address!= null}">

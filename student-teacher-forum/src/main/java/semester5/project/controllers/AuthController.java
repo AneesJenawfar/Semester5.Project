@@ -76,8 +76,8 @@ public class AuthController {
 			userService.register(user);
 			String token = userService.createEmailVerificationToken(user);
 			emailService.sendVarificationEmail(user.getEmail(), token);
-			// user.setEnabled(true);
-			// userService.save(user);
+			user.setEnabled(true);
+			userService.save(user);
 			mav.setViewName("redirect:/verifyemail");
 
 		}

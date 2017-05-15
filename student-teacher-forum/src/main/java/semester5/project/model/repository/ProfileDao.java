@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import semester5.project.model.entity.AppUser;
 import semester5.project.model.entity.Profile;
 
-public interface ProfileDao extends CrudRepository<Profile, Long> {
+public interface ProfileDao extends PagingAndSortingRepository<Profile, Long> {
 
 	Profile findByUser(AppUser user);
 

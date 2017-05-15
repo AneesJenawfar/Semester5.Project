@@ -1,7 +1,6 @@
 package semester5.project.controllers;
 
 import java.util.List;
-import java.util.Set;
 
 import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import semester5.project.model.entity.AppUser;
 import semester5.project.model.entity.Comment;
-import semester5.project.model.entity.Friend;
 import semester5.project.model.entity.Post;
 import semester5.project.model.entity.PostNotification;
 import semester5.project.service.CommentService;
+import semester5.project.service.FriendService;
 import semester5.project.service.PostNotificationService;
 import semester5.project.service.PostService;
 import semester5.project.service.UserService;
@@ -36,6 +35,9 @@ public class CommentController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private FriendService friendService;
 
 	@Autowired
 	private CommentService commentService;
@@ -58,9 +60,8 @@ public class CommentController {
 	@RequestMapping(value = "/comment", method = RequestMethod.GET)
 	public ModelAndView viewComments(ModelAndView mav, @RequestParam("id") Long id) {
 		AppUser user = getUser();
-		// Comment comment = new Comment();
+
 		Post post = postService.get(id);
-		// mav.getModel().put("comment", comment);
 
 		List<Comment> comments = commentService.getComments(post);
 		mav.getModel().put("comments", comments);
@@ -71,27 +72,6 @@ public class CommentController {
 		return mav;
 	}
 
-	/*@RequestMapping(value = "/comments/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseEntity<List<Comment>> serveComment(@PathVariable("id") Long id) throws IOException {
-		Post post = postService.get(id);
-		List<Comment> comments = commentService.getComments(post);
-
-		return new ResponseEntity<>(comments, HttpStatus.OK);
-	}*/
-
-	/*
-	 @RequestMapping(value = "/comment", method = RequestMethod.POST) public
-	 ModelAndView addComment(ModelAndView mav, @Valid Comment comment, @Valid
-	 Post post, BindingResult result) {
-	
-	 AppUser user = getUser(); mav.setViewName("redirect:/"); if
-	 (!result.hasErrors()) { comment.setUser(user); comment.setPost(post);
-	 commentService.save(comment); mav.setViewName("redirect:/viewpost"); }
-	 else { commentService.delete(comment.getId()); } return mav; }
-	 */
-	
-	
 	@RequestMapping(value = "/comment", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> saveComment(@RequestParam("id") Long id, @RequestParam("text") String text) {
@@ -150,22 +130,19 @@ public class CommentController {
 			PostNotification notification = new PostNotification(user, post.getUser(), post, "share");
 			postNotificationService.save(notification);
 		}
-		Set<Friend> friends = user.getFriends();
+		List<AppUser> friends = friendService.getFreinds(user);
 
 		if (friends == null) {
 			ActionStatus status = new ActionStatus(shared);
-			System.out.println(status);
 			return new ResponseEntity<>(status, HttpStatus.OK);
 		}
 
-		for (Friend friend : friends) {
-			AppUser friendUser = friend.getUser();
-			PostNotification notify = new PostNotification(user, friendUser, post, "shared");
+		for (AppUser friend : friends) {
+			PostNotification notify = new PostNotification(user, friend, post, "shared");
 			postNotificationService.save(notify);
 		}
 
 		ActionStatus status = new ActionStatus(shared);
-		System.out.println(status);
 		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 
@@ -184,8 +161,10 @@ public class CommentController {
 	public ResponseEntity<List<PostNotification>> getNotify() {
 
 		AppUser user = getUser();
-		List<PostNotification> notifications = postNotificationService.getcheck(user);
-
+		List<PostNotification> notifications = postNotificationService.getTopNotification(user);
+		// Date d = new Date();
+		// List<PostNotification> notifications =
+		// postNotificationService.getNewNotification(d, user);
 		return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
 

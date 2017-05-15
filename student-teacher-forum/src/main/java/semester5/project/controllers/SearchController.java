@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import semester5.project.model.dto.SearchResult;
+import semester5.project.model.entity.Profile;
+import semester5.project.service.ProfileService;
 import semester5.project.service.SearchService;
 
 @Controller
@@ -16,6 +18,9 @@ public class SearchController {
 
 	@Autowired
 	private SearchService searchService;
+
+	@Autowired
+	private ProfileService profileService;
 
 	@RequestMapping(value = "/search-interest", method = { RequestMethod.POST, RequestMethod.GET })
 	public ModelAndView searchByInterest(ModelAndView mav, @RequestParam("s") String text,
@@ -50,6 +55,15 @@ public class SearchController {
 		mav.getModel().put("s", text);
 		mav.getModel().put("page", results);
 		mav.setViewName("app.search");
+		return mav;
+	}
+
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	public ModelAndView allUsers(ModelAndView mav, @RequestParam(name = "p", defaultValue = "1") int pageNumber) {
+
+		Page<Profile> results = profileService.getPage(pageNumber);
+		mav.getModel().put("page", results);
+		mav.setViewName("app.friends");
 		return mav;
 	}
 

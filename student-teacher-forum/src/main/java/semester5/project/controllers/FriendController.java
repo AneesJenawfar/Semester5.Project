@@ -1,6 +1,6 @@
 package semester5.project.controllers;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import semester5.project.model.entity.AppUser;
 import semester5.project.model.entity.Friend;
@@ -40,14 +41,8 @@ public class FriendController {
 
 		AppUser user = getUser();
 		AppUser friendUser = userService.get(id);
-
-		Friend friend = new Friend();
-		friend.setUser(user);
+		Friend friend = new Friend(user, friendUser);
 		friendService.save(friend);
-
-		friendUser.addFriend(friend);
-		userService.save(friendUser);
-
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
@@ -57,11 +52,10 @@ public class FriendController {
 
 		AppUser user = getUser();
 		AppUser friendUser = userService.get(id);
-		Friend friend = null;
-		friend = findFriend(user, friendUser);
+		Friend friend = friendService.getByUsers(friendUser, user);
 		if (friend != null) {
 			friend.setConfirm(true);
-			userService.save(user);
+			friendService.save(friend);
 		}
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
@@ -72,19 +66,15 @@ public class FriendController {
 
 		AppUser user = getUser();
 		AppUser friendUser = userService.get(id);
-		Friend friend = findFriend(user, friendUser);
+		Friend friend = friendService.getByUsers(friendUser, user);
 
 		if (friend != null) {
-			user.removeFriend(friend);
-			userService.save(user);
 			friendService.delete(friend.getId());
 			return new ResponseEntity<>(null, HttpStatus.OK);
-		} else {
-			friend = findFriend(friendUser, user);
-			friendUser.removeFriend(friend);
-			userService.save(friendUser);
-			friendService.delete(friend.getId());
 		}
+
+		friend = friendService.getByUsers(user, friendUser);
+		friendService.delete(friend.getId());
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 
@@ -94,7 +84,7 @@ public class FriendController {
 
 		AppUser user = getUser();
 		AppUser friendUser = userService.get(id);
-		Friend friend = findFriend(user, friendUser);
+		Friend friend = friendService.getByUsers(friendUser, user);
 
 		if (friend != null && friend.getConfirm() == true) {
 			return new ResponseEntity<>("Connected", HttpStatus.OK);
@@ -102,8 +92,7 @@ public class FriendController {
 		} else if (friend != null && friend.getConfirm() == false) {
 			return new ResponseEntity<>("Accept Request", HttpStatus.OK);
 		}
-
-		friend = findFriend(friendUser, user);
+		friend = friendService.getByUsers(user, friendUser);
 
 		if (friend != null && friend.getConfirm() == true) {
 			return new ResponseEntity<>("Connected", HttpStatus.OK);
@@ -115,16 +104,14 @@ public class FriendController {
 		return new ResponseEntity<>("Connect", HttpStatus.OK);
 	}
 
-	private Friend findFriend(AppUser user, AppUser friendUser) {
-		Set<Friend> friends = user.getFriends();
-		Friend friend = null;
-
-		for (Friend fri : friends) {
-			if (fri.getUser().equals(friendUser)) {
-				friend = fri;
-				break;
-			}
-		}
-		return friend;
+	@RequestMapping(value = "/get-friends", method = RequestMethod.GET)
+	public ModelAndView search(ModelAndView mav) {
+		AppUser user = getUser();
+		List<AppUser> friends = friendService.getFreinds(user);
+		mav.getModel().put("type", "friends");
+		mav.getModel().put("friends", friends);
+		mav.setViewName("app.search");
+		return mav;
 	}
+
 }

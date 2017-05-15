@@ -9,48 +9,6 @@
 <c:url var="likepath" value="/like" />
 <c:url var="dislikepath" value="/dislike" />
 <c:url var="saveComment" value="/comment" />
-<c:url var="getComments" value="/comments/${post.id}" />
-<%-- <div class="row">
-	<div class="col-md-8 col-md-offset-2 text-center">
-		<div class="well">
-			<ul class="list-unstyled ui-sortable">
-				<strong class="pull-left primary-font">Post Updated on <fmt:formatDate
-						pattern="EEEE d MMMM y" value="${post.updated}" /></strong>
-				<small class="pull-right text-muted"> <span
-					class="glyphicon glyphicon-time"></span> <fmt:formatDate
-						pattern="'at' HH:mm:s" value="${post.updated}" /></small>
-				<br />
-				<br />
-				<li class="ui-state-default">${post.text }</li>
-				<br />
-			</ul>
-		</div>
-		<c:forEach var="com" items="${comments}">
-			<li class="ui-state-default">${com.text }</li>
-		</c:forEach>
-	</div>
-	
-	<div class="col-md-8 col-md-offset-2 text-center">
-		<div class="box">
-			<div class="box-content">
-				<h1 class="tag-title">Add a Comment</h1>
-				<form:form modelAttribute="comment">
-					<div class="errors">
-						<form:errors path="text" />
-					</div>
-					<div class="form-group">
-						<form:textarea path="text" class="form-control" name="text"
-							rows="5"></form:textarea>
-					</div>
-					<div class="form-group">
-						<button class="btn btn-primary " name="submit" type="submit">Add</button>
-					</div>
-				</form:form>
-			</div>
-		</div>
-	</div>
-</div>
- --%>
 
 <div class="row">
 
@@ -112,33 +70,6 @@
 
 			</div>
 		</div>
-
-
-		<%-- 
-		<div id="comment">
-			<ul id="commentList">
-				<c:choose>
-					<c:when test="${empty comments} }">
-						<li>Be the first commenter</li>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="com" items="${comments}">
-							<div class="comment-dis">
-								<h4>
-									${com.user.firstname} ${com.user.surname} says: <small>
-										<fmt:formatDate pattern="HH:mm:s" value="${com.added}" /> on
-										<fmt:formatDate pattern="EEEE d MMMM y" value="${com.added}" />
-									</small>
-								</h4>
-								<div class="com-text">
-									<p>${com.text}</p>
-								</div>
-							</div>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</ul>
-		</div> --%>
 		<br />
 	</div>
 </div>

@@ -19,13 +19,22 @@ public class Friend {
 	private Long id;
 
 	@ManyToOne(targetEntity = AppUser.class)
-	@JoinColumn(name = "user_id", nullable = false)
-	private AppUser user;
+	@JoinColumn(name = "sender_id", nullable = false)
+	private AppUser sender;
+
+	@ManyToOne(targetEntity = AppUser.class)
+	@JoinColumn(name = "accepter_id", nullable = false)
+	private AppUser accepter;
 
 	@Column(name = "confirmation")
 	private Boolean confirm = false;
 
 	public Friend() {
+	}
+
+	public Friend(AppUser sender, AppUser accepter) {
+		this.sender = sender;
+		this.accepter = accepter;
 	}
 
 	public Long getId() {
@@ -36,12 +45,20 @@ public class Friend {
 		this.id = id;
 	}
 
-	public AppUser getUser() {
-		return user;
+	public AppUser getSender() {
+		return sender;
 	}
 
-	public void setUser(AppUser user) {
-		this.user = user;
+	public void setSender(AppUser sender) {
+		this.sender = sender;
+	}
+
+	public AppUser getAccepter() {
+		return accepter;
+	}
+
+	public void setAccepter(AppUser accepter) {
+		this.accepter = accepter;
 	}
 
 	public Boolean getConfirm() {
@@ -54,7 +71,8 @@ public class Friend {
 
 	@Override
 	public String toString() {
-		return "Friend [id=" + id + ", user=" + user + ", confirm=" + confirm + "]";
+		return "Friend [id=" + id + ", sender=" + sender.getEmail() + ", accepter=" + accepter.getEmail() + ", confirm="
+				+ confirm + "]";
 	}
 
 }

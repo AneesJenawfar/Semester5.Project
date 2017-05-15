@@ -167,7 +167,7 @@ public class ProfileController {
 
 		try {
 			FileInfo photoInfo = fileService.saveImageFile(file, photoUploadDirectory, "Photos", "P" + user.getId(),
-					350, 400);
+					250, 300);
 			profile.setPhotoDetails(photoInfo);
 			profileService.save(profile);
 

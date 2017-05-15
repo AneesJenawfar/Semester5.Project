@@ -8,17 +8,15 @@
 <c:url var="likepath" value="/like" />
 <c:url var="dislikepath" value="/dislike" />
 <c:url var="share" value="/share" />
-
+<c:url var="profilePhoto" value="/profile-photo/${user.id}" />
 <div class="row">
 
 	<!-- Blog Entries Column -->
 	<div class="col-md-10 col-md-offset-1">
-		<div class="col-md-7">
-
-			<h1 class="page-header">Posts</h1>
+		<div class="col-md-6">
 
 			<pgn:pagination url="${url}" page="${page}" size="5" />
-			
+
 
 			<c:forEach var="post" items="${page.content}">
 				<c:url var="edit" value="/editpost?id=${post.id}" />
@@ -26,86 +24,68 @@
 				<c:url var="comments" value="/comment?id=${post.id}" />
 				<c:url var="profileLink" value="/profile/${post.user.id}" />
 				<c:url var="postPhoto" value="/post-photo/${post.id}" />
-				<div class="row">
+				<div class="post-box">
 					<div class="post-status" id="s${post.id}"></div>
-					<h3>
-						<a href="${comments}">${post.title }</a>
-					</h3>
-				</div>
+					<h4>
+						<a href="${profileLink}">${post.user.firstname}
+							${post.user.surname}</a> add a Post.
+					</h4>
 
-				<p class="lead">
-					by <a href="${profileLink}">${post.user.firstname}
-						${post.user.surname}</a>
-				</p>
-				<p>
-					<small> <span class="glyphicon glyphicon-time"></span>
-						Posted on <fmt:formatDate pattern="EEEE d MMMM y"
-							value="${post.updated}" /> at <fmt:formatDate
-							pattern="'at' HH:mm:s" value="${post.updated}" /></small>
-				</p>
-				<p>
-					<a href="${comments}">${post.text }</a>
-				</p>
-				<c:if test="${post.hasPhoto== true}">
-					<hr>
-					<img class="img-responsive" src="${postPhoto}" alt="" />
-					<hr>
-				</c:if>
-				<div class="row">
-					<c:choose>
-						<c:when test="${post.user==user}">
-							<div class="edit-links-delete pull-right">
-								<a href="${edit}">edit</a> | <a
-									onclick="return confirm('This post is going to be deleted. Are you sure?');"
-									href="${delete}">delete</a>
-							</div>
-						</c:when>
-					</c:choose>
-					<c:set var="hideLike"
-						value="${fn:contains(post.likes, user) ? 'none': 'unset'}" />
-					<c:set var="hideDislike"
-						value="${fn:contains(post.likes, user) ? 'unset': 'none'}" />
 
-					<div class="edit-links pull-left">
-						<a style="display: ${hideLike}" href="#" id="l${post.id}"
-							onclick="like(this.id,event)">Like</a> <a
-							style="display: ${hideDislike}" href="#" id="d${post.id}"
-							onclick="dislike(this.id,event)">Dislike</a> | <a
-							href="${comments}">Comment</a>| <a href="#" id="${post.id}"
-							onclick="share(this.id, event)">Share</a>
+
+					<p>
+						<small> <span class="glyphicon glyphicon-time"></span> on
+							<fmt:formatDate pattern="EEEE d MMMM y" value="${post.updated}" />
+							at <fmt:formatDate pattern="'at' HH:mm:s" value="${post.updated}" /></small>
+					</p>
+					<p>
+						<a href="${comments}">${post.title }</a> ${post.text }
+					</p>
+					<c:if test="${post.hasPhoto== true}">
+						<hr>
+						<img class="img-responsive" src="${postPhoto}" alt="" />
+						<hr>
+					</c:if>
+					<div class="row">
+						<c:choose>
+							<c:when test="${post.user==user}">
+								<div class="edit-links-delete pull-right">
+									<a href="${edit}">edit</a> | <a
+										onclick="return confirm('This post is going to be deleted. Are you sure?');"
+										href="${delete}">delete</a>
+								</div>
+							</c:when>
+						</c:choose>
+						<c:set var="hideLike"
+							value="${fn:contains(post.likes, user) ? 'none': 'unset'}" />
+						<c:set var="hideDislike"
+							value="${fn:contains(post.likes, user) ? 'unset': 'none'}" />
+
+						<div class="edit-links pull-left">
+							<a style="display: ${hideLike}" href="#" id="l${post.id}"
+								onclick="like(this.id,event)">Like</a> <a
+								style="display: ${hideDislike}" href="#" id="d${post.id}"
+								onclick="dislike(this.id,event)">Dislike</a> | <a
+								href="${comments}">Comment</a>| <a href="#" id="${post.id}"
+								onclick="share(this.id, event)">Share</a>
+						</div>
 					</div>
 				</div>
 			</c:forEach>
 		</div>
 
 		<!-- Blog Sidebar Widgets Column -->
-		<div class="col-md-5">
-
-			<!-- Blog Search Well -->
-			<div class="well">
-				<h4>Blog Search</h4>
-				<div class="input-group">
-					<input type="text" class="form-control"> <span
-						class="input-group-btn">
-						<button class="btn btn-default" type="button">
-							<span class="glyphicon glyphicon-search"></span>
-						</button>
-					</span>
-				</div>
-				<!-- /.input-group -->
-			</div>
+		<div class="col-md-5 col-md-offset-1 image-photo">
 
 			<!-- Blog Categories Well -->
 			<div class="well">
-				<h4>Blog Categories</h4>
+				<div style="text-align: center;">
+					<h4>${user.firstname}${user.surname}</h4>
+				</div>
 				<div class="row">
-					<div class="col-lg-6">
-						<ul class="list-unstyled">
-							<li><a href="#">Category Name</a></li>
-							<li><a href="#">Category Name</a></li>
-							<li><a href="#">Category Name</a></li>
-							<li><a href="#">Category Name</a></li>
-						</ul>
+					<div class="col-md-12">
+						<img class="img-rounded img-responsive homimage" id="profileImage"
+							src="${profilePhoto}" />
 					</div>
 
 				</div>

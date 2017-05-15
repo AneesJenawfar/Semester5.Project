@@ -9,7 +9,7 @@
 </div>
 <div class="col-md-10 col-md-offset-1">
 	<div class='panel-primary '>
-		<div class='panel-heading text-center'>
+		<div class='panel-heading text-center ' id="register-head">
 			<h3>Create New Account</h3>
 		</div>
 		<div class='panel-body'>
@@ -75,10 +75,18 @@
 
 				<div class='form-group'>
 					<div class='col-md-offset-6 col-md-3'>
-						<button class='btn-lg btn-primary'>Register</button>
+						<button class='btn-lg btn-primary' id="reg-butn">Register</button>
 					</div>
 				</div>
 			</form:form>
 		</div>
 	</div>
 </div>
+
+<style>
+	body
+{
+    background: url('${contextRoot}/img/front.jpg') fixed;
+    
+}
+</style>

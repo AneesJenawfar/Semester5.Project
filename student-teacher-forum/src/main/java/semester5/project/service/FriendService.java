@@ -28,8 +28,16 @@ public class FriendService {
 		return friendDao.findOne(id);
 	}
 
-	public List<Friend> getFreinds(AppUser user) {
+	public Friend getByUsers(AppUser sender, AppUser accepter) {
+		return friendDao.findBySenderAndAccepter(sender, accepter);
+	}
 
-		return friendDao.findByUser(user).stream().collect(Collectors.toList());
+	public List<AppUser> getFreinds(AppUser user) {
+
+		List<AppUser> users1 = friendDao.findSenderByAccepter(user).stream().distinct().collect(Collectors.toList());
+		List<AppUser> users2 = friendDao.findAccepterBySender(user).stream().distinct().collect(Collectors.toList());
+
+		users1.addAll(users2);
+		return users1;
 	}
 }

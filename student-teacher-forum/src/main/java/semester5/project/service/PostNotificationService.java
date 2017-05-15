@@ -1,5 +1,6 @@
 package semester5.project.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,13 @@ public class PostNotificationService {
 		return postNotificationDao.findByTargetUserOrderByTimeDesc(user).stream().collect(Collectors.toList());
 	}
 
-	public List<PostNotification> getNewNotification(AppUser user) {
+	public List<PostNotification> getTopNotification(AppUser user) {
 
 		return postNotificationDao.findFirst10ByTargetUserOrderByTimeDesc(user).stream().collect(Collectors.toList());
 	}
 
-	public List<PostNotification> getcheck(AppUser user) {
-		return postNotificationDao.findFirst10ByTargetUserOrderByTimeDesc(user).stream().collect(Collectors.toList());
+	public List<PostNotification> getNewNotification(Date time, AppUser user) {
+		return postNotificationDao.findByTimeBeforeAndTargetUser(time, user).stream().collect(Collectors.toList());
 	}
 
 	public void delete(Long id) {

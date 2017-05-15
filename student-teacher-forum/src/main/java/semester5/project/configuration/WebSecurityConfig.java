@@ -31,13 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/addpost","/editpost","/deletepost","/viewpost","/profile","/edit-profile","/upload-photo",
 							"/profile/*","/save-interest","/delete-interest","/comment", "/like", "/dislike",
 							"/upload-post-photo/*", "/post-photo/{id}","/friend-status/*","/unfriend",
-							"/accept-request","/send-request","/share","/notifications").authenticated()
+							"/accept-request","/send-request","/share","/notifications","/chats","/saveChat",
+							"/get-chats","/new-chats","/chat-list","/all").authenticated()
 				.anyRequest().denyAll()
 				/*.antMatchers("").hasRole("ADMIN")*/
 				.and()
 			.formLogin()
 				.loginPage("/login")
-				.defaultSuccessUrl("/")
+				.defaultSuccessUrl("/viewpost")
 				.permitAll()
 				.and()
 			.logout()

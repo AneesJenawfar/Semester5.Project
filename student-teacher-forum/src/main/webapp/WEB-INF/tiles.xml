@@ -70,4 +70,12 @@
   <definition name="app.notification" extends="app.default">
     <put-attribute name="content" value="/WEB-INF/tiles/notification.jsp" />
   </definition>
+  
+  <definition name="app.chat" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/chat.jsp" />
+  </definition>
+  
+  <definition name="app.friends" extends="app.default">
+    <put-attribute name="content" value="/WEB-INF/tiles/friends.jsp" />
+  </definition>
 </tiles-definitions>

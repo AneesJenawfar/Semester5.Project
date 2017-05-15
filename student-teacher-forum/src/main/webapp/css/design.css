@@ -1,5 +1,123 @@
-/* Notification popup*/
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 
+@import
+	url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+	;
+/*http://codepen.io/drehimself/pen/KdXwxR?utm_source=bypeople
+http://nicolasgallagher.com/pure-css-speech-bubbles/demo/*/
+/*Chat*/
+#text-chat {
+	height: 50px;
+	font-size: 15px;
+}
+
+#btn-chat {
+	height: 50px;
+}
+
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+.chat .chat-history {
+	padding: 30px 30px 20px;
+	border-bottom: 2px solid white;
+}
+
+.chat .chat-history .message-data {
+	margin-bottom: 15px;
+}
+
+.chat .chat-history .message-data-time {
+	color: #a8aab1;
+	padding-left: 6px;
+}
+
+
+.chat .chat-history .message {
+	color: white;
+	padding: 10px 20px;
+	line-height: 26px;
+	font-size: 14px;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	width: 80%;
+	position: relative;
+}
+
+.chat .chat-history .message:after {
+	content: "";
+	position: absolute;
+	top: -15px;
+	left: 20px;
+	border-width: 0 15px 15px;
+	border-style: solid;
+	border-color: #CCDBDC transparent;
+	display: block;
+	width: 0;
+}
+
+.chat .chat-history .you-message {
+	background: #CCDBDC;
+	color: #003366;
+}
+
+.chat .chat-history .me-message {
+	background: #E9724C;
+}
+
+.chat .chat-history .me-message:after {
+	border-color: #E9724C transparent;
+	right: 20px;
+	top: -15px;
+	left: auto;
+	bottom: auto;
+}
+
+.chat .chat-message {
+	padding: 20px;
+}
+
+.chat .chat-message .fa-file-o, .chat .chat-message .fa-file-image-o {
+	font-size: 16px;
+	color: gray;
+	cursor: pointer;
+}
+
+.chat-ul li {
+	list-style-type: none;
+}
+
+.align-left {
+	text-align: left;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.float-right {
+	float: right;
+}
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+.you {
+	color: #CCDBDC;
+}
+
+.me {
+	color: #E9724C;
+}
+
+/* Notification popup*/
 #notification_count {
 	padding: 3px 7px 3px 7px;
 	background: #cc0000;
@@ -27,11 +145,12 @@
 	display: block;
 	width: 100%;
 	height: 100%;
-	font-weight:bold; 
+	font-weight: bold;
+	padding-right: 10px;
 }
 
-#notify-drop li a :HOVER{
-	color: black;	
+#notify-drop li a :HOVER {
+	color: black;
 }
 
 #notificationFooter {
@@ -43,7 +162,7 @@
 #notify-drop {
 	padding: 15px;
 	padding-bottom: 0px;
-	width: 500px !important;
+	width: 550px !important;
 	background-color: white;
 }
 
@@ -172,7 +291,7 @@ li.ui-state-default {
 	margin-bottom: 50px;
 }
 
-.date{
+.date {
 	padding-right: 10px;
 }
 
@@ -213,11 +332,40 @@ label small {
 }
 
 /* View Post */
+.edit-links-delete{
+	margin-right: 20px;
+} 
+
+.post-box{
+	padding:5px;
+	background-color:#d5cfd6;
+	margin-bottom: 5px;
+	width: 600px;
+}
+
+.edit-links{
+	margin-left: 20px;
+}
+.image-photo{
+	position: fixed;
+	right: 50px;
+	width: 400px;
+}
+
 .post-status {
 	position: absolute;
 	left: 100px;
 	font-weight: bold;
 	color: green;
+}
+
+.homimage{
+	margin-bottom: 10px;
+	margin-left: 50px;
+	margin-right: 50px;
+	width: 250px;
+	height: 275px;
+	right: 50px;
 }
 
 /* View Profile */
@@ -226,6 +374,11 @@ label small {
 }
 
 .reject {
+	margin-bottom: 10px;
+	margin-left: 5px;
+}
+
+.chat {
 	margin-bottom: 10px;
 	margin-left: 5px;
 }
@@ -348,8 +501,30 @@ small {
 	margin-left: 5em;
 	margin-bottom: 1em;
 }
+/*register*/
+
+#register-head{
+	background-color: gray;
+}
+
+#reg-butn{
+	background-color: gray;
+}
+
+#reg-butn:HOVER{
+	background-color: #c0c0c0;
+}
+
 
 /* Signin */
+.register-prompt{
+	color: navy;
+}
+
+.btn-block{
+	background-color: #ff0000;
+}
+
 .wrapper {
 	margin-top: 80px;
 	margin-bottom: 20px;
@@ -359,8 +534,9 @@ small {
 	max-width: 420px;
 	padding: 30px 38px 66px;
 	margin: 0 auto;
-	background-color: #eee;
+	background:transparent;
 	border: 3px dotted rgba(0, 0, 0, 0.1);
+	color: #800000;
 }
 
 .form-signin-heading {
