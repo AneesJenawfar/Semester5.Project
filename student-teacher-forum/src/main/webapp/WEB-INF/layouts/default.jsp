@@ -49,7 +49,7 @@
 	<nav class="navbar CC">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">AccaForum</a>
+			<a class="navbar-brand" href="${contextRoot}/about">AccaForum</a>
 		</div>
 
 		<div class="collapse navbar-collapse"
@@ -62,7 +62,7 @@
 				<sec:authorize access="isAuthenticated()">
 					<li><a href="${contextRoot}/viewpost">Home </a></li>
 				</sec:authorize>
-				<li><a href="${contextRoot}/about">About</a></li>
+				<%-- <li><a href="${contextRoot}/about">About</a></li> --%>
 				<sec:authorize access="isAuthenticated()">
 					<li><a href="${contextRoot}/addpost">Add Post</a></li>
 				</sec:authorize>

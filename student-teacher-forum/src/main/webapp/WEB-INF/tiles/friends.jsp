@@ -17,8 +17,8 @@
 	</div>
 
 	<c:forEach var="result" items="${page.content}">
-		<c:url var="profilePhoto" value="/profile-photo/${result.userId}" />
-		<c:url var="profileLink" value="/profile/${result.userId}" />
+		<c:url var="profilePhoto" value="/profile-photo/${result.user.id}" />
+		<c:url var="profileLink" value="/profile/${result.user.id}" />
 
 		<div class="list-group">
 			<div class="list-group-item clearfix">
@@ -29,8 +29,8 @@
 				</div>
 				<div class="profile-teaser-main">
 					<h2 class="profile-name">
-						<a href="${profileLink}"><c:out value="${result.firstname}" />
-							<c:out value="${result.surname}" /></a>
+						<a href="${profileLink}"><c:out value="${result.user.firstname}" />
+							<c:out value="${result.user.surname}" /></a>
 					</h2>
 					<div class="profile-info">
 						<div class="info">

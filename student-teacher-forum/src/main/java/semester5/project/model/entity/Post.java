@@ -32,11 +32,11 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Size(min = 5, max = 50, message = "{addpost.title.size}")
+	@Size(min = 0, max = 50, message = "{addpost.title.size}")
 	@Column(name = "title")
 	private String title;
 
-	@Size(min = 2, max = 255, message = "{addpost.text.size}")
+	@Size(min = 0, max = 255, message = "{addpost.text.size}")
 	@Column(name = "text")
 	private String text;
 

@@ -85,6 +85,13 @@ public class PostController {
 		return mav;
 	}
 
+	/*
+	 * @RequestMapping(value = "/addpost", method = RequestMethod.GET)
+	 * ModelAndView addPost(ModelAndView mav) { Post post = new Post();
+	 * mav.getModel().put("post", post); mav.setViewName("app.addPost"); return
+	 * mav; }
+	 */
+
 	@RequestMapping(value = "/addpost", method = RequestMethod.POST)
 	ModelAndView addPost(ModelAndView mav, @Valid Post post, BindingResult result) {
 		AppUser user = getUser();
@@ -98,6 +105,21 @@ public class PostController {
 		return mav;
 	}
 
+	/*
+	 * @RequestMapping(value = "/addpost", method = RequestMethod.POST)
+	 * ModelAndView addPost(ModelAndView mav, @Valid Post post, BindingResult
+	 * result) { AppUser user = getUser(); if (post.getId() != null) { Post real
+	 * = postService.get(post.getId()); real.setUser(user); if
+	 * (!post.getTitle().equals("") || !post.getText().equals("")) {
+	 * real.setTitle(post.getTitle()); real.setText(post.getText());
+	 * postService.save(real); mav.setViewName("redirect:/viewpost"); return
+	 * mav; }else{ mav.setViewName("redirect:/addpost"); return mav; } } Post
+	 * real = new Post(); if (!post.getTitle().equals("") ||
+	 * !post.getText().equals("")) { real.setTitle(post.getTitle());
+	 * real.setText(post.getText()); postService.save(real);
+	 * mav.setViewName("redirect:/viewpost"); return mav; }else{
+	 * mav.setViewName("redirect:/addpost"); return mav; } }
+	 */
 	@RequestMapping(value = "/viewpost", method = RequestMethod.GET)
 	public ModelAndView viewPost(ModelAndView mav, @RequestParam(name = "p", defaultValue = "1") int pagenumber) {
 

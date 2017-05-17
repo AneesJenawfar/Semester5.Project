@@ -80,7 +80,7 @@
 			<!-- Blog Categories Well -->
 			<div class="well">
 				<div style="text-align: center;">
-					<h4>${user.firstname}${user.surname}</h4>
+					<h4>${user.firstname} &nbsp;${user.surname}</h4>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
@@ -156,3 +156,13 @@
 	$(document).ready(function() {
 	});
 </script>
+
+<style>
+
+
+body
+{
+    background-color: threedhighlight;
+    
+}
+</style>

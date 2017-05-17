@@ -107,8 +107,8 @@ public class AuthController {
 			return mav;
 		}
 		userService.deleteToken(token);
-		user.setEnabled(true);
-		userService.save(user);
+		// user.setEnabled(true);
+		// userService.save(user);
 
 		mav.getModel().put("message", confirmedMessage);
 		mav.setViewName("app.message");
